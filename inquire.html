@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Request a Consultation — Anchor Advisors North</title>
+<link rel="stylesheet" href="shared.css">
+<style>
+.inquire-hero{background:var(--navy3);padding:5rem 2rem 4rem;border-bottom:1px solid rgba(176,125,46,.2);text-align:center;}
+.inquire-hero h1{font-family:var(--serif);font-size:clamp(2rem,3.8vw,3.2rem);color:var(--white);font-weight:600;margin-bottom:.85rem;}
+.inquire-hero h1 em{color:var(--gold-lt);font-style:italic;}
+.inquire-hero p{font-size:.97rem;color:rgba(255,255,255,.5);font-weight:300;max-width:500px;margin:0 auto;line-height:1.8;}
+
+.inquire-body{display:grid;grid-template-columns:1fr 420px;gap:4rem;align-items:start;margin-top:3.5rem;}
+
+.info-col h3{font-family:var(--serif);font-size:1.3rem;color:var(--navy);margin-bottom:.75rem;}
+.info-col p{font-size:.9rem;color:var(--muted);line-height:1.8;margin-bottom:1.25rem;}
+.what-happens{background:var(--warm2);border:1px solid var(--border);border-radius:var(--r);padding:1.5rem 1.5rem;margin-bottom:1.5rem;}
+.what-happens h4{font-family:var(--serif);font-size:1.05rem;color:var(--navy);margin-bottom:1rem;}
+.wh-step{display:flex;align-items:flex-start;gap:.85rem;margin-bottom:.85rem;}
+.wh-step:last-child{margin-bottom:0;}
+.wh-n{background:var(--navy);color:var(--gold-lt);width:1.6rem;height:1.6rem;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:600;flex-shrink:0;margin-top:.1rem;}
+.wh-step p{font-size:.86rem;color:var(--text);line-height:1.6;}
+.wh-step strong{color:var(--navy);}
+
+.option-pills{display:flex;flex-direction:column;gap:.65rem;}
+.option-pill{background:var(--white);border:1px solid var(--border);border-radius:8px;padding:.9rem 1.1rem;font-size:.86rem;color:var(--text);display:flex;align-items:flex-start;gap:.7rem;cursor:pointer;transition:border-color .18s,background .18s;}
+.option-pill:hover{border-color:var(--gold);background:var(--gold-bg);}
+.option-pill input[type=radio]{accent-color:var(--gold);flex-shrink:0;margin-top:.15rem;}
+.option-pill .pill-label{font-weight:600;color:var(--navy);display:block;margin-bottom:.15rem;}
+.option-pill .pill-sub{font-size:.78rem;color:var(--muted);}
+
+.form-card{background:var(--white);border:1px solid var(--border);border-radius:14px;padding:2rem 1.85rem;box-shadow:var(--shadow-lg);position:sticky;top:calc(var(--nav-h) + 1.5rem);}
+.form-card h3{font-family:var(--serif);font-size:1.25rem;color:var(--navy);margin-bottom:.3rem;}
+.form-card .fc-sub{font-size:.8rem;color:var(--muted);margin-bottom:1.5rem;}
+.field{margin-bottom:1rem;}
+.field label{display:block;font-size:.76rem;font-weight:600;color:var(--navy);margin-bottom:.32rem;letter-spacing:.02em;}
+.field input,.field select,.field textarea{width:100%;padding:.72rem .95rem;border:1.5px solid var(--border);border-radius:7px;background:var(--warm);color:var(--text);font-family:var(--sans);font-size:.9rem;outline:none;transition:border-color .18s,background .18s;-webkit-appearance:none;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);background:var(--white);}
+.field textarea{resize:vertical;min-height:90px;}
+.field select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%236b7787' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .85rem center;padding-right:2.2rem;}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:.85rem;}
+.form-submit{width:100%;background:var(--gold);color:var(--white);padding:.9rem;border:none;border-radius:8px;font-family:var(--sans);font-weight:600;font-size:.95rem;cursor:pointer;transition:background .18s;margin-top:.25rem;}
+.form-submit:hover{background:var(--gold-lt);}
+.form-note{font-size:.72rem;color:var(--muted);text-align:center;margin-top:.65rem;line-height:1.6;}
+.form-success{display:none;text-align:center;padding:2.5rem 1rem;}
+.form-success .fs-icon{font-size:2.5rem;margin-bottom:.75rem;}
+.form-success h3{font-family:var(--serif);font-size:1.4rem;color:var(--navy);margin-bottom:.5rem;}
+.form-success p{font-size:.88rem;color:var(--muted);}
+
+.mtp-alt{background:var(--navy3);border-radius:var(--r);padding:1.5rem;margin-top:1.5rem;border:1px solid rgba(176,125,46,.18);}
+.mtp-alt p{font-size:.85rem;color:rgba(255,255,255,.55);line-height:1.7;}
+.mtp-alt a{color:var(--gold-lt);font-weight:500;}
+
+@media(max-width:860px){.inquire-body{grid-template-columns:1fr;}.form-card{position:static;}}
+@media(max-width:560px){.field-row{grid-template-columns:1fr;}}
+</style>
+</head>
+<body>
+<nav class="site-nav"><div class="nav-in"><a href="index.html" class="nav-logo"><div class="nav-logo-mark"><svg width="34" height="34" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="16" stroke="#b07d2e" stroke-width="1.25" fill="none" opacity=".5"/><line x1="17" y1="8" x2="17" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="26" x2="23" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><path d="M11 20 Q8 21 8.5 24.5 Q11 27.5 11 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M23 20 Q26 21 25.5 24.5 Q23 27.5 23 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="12.5" y1="14" x2="21.5" y2="14" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><circle cx="17" cy="9.5" r="2" stroke="#b07d2e" stroke-width="1.25" fill="none"/></svg></div><div class="nav-logo-text"><span class="nav-logo-name">Anchor Advisors North</span><span class="nav-logo-sub">Estate Planning · Northern Indiana</span></div></a><ul class="nav-links" id="navLinks"><li><a href="index.html">Home</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="who-we-serve.html">Who We Serve</a></li><li><a href="about.html">About Keith</a></li><li><a href="inquire.html" class="nav-cta active">Request Consultation</a></li></ul><div class="ham" id="ham" onclick="toggleNav()"><span></span><span></span><span></span></div></div></nav>
+
+<div class="inquire-hero">
+  <div class="eyebrow light">Get Started</div>
+  <h1>Request a <em>consultation.</em></h1>
+  <p>A 30-minute conversation is all it takes to understand your situation and which planning path is right for you. No commitment required.</p>
+</div>
+
+<section class="section white">
+  <div class="wrap">
+    <div class="inquire-body">
+      <div class="info-col fi">
+        <h3>What happens after you send this.</h3>
+        <p>We respond to every inquiry within one business day. Here's exactly what to expect:</p>
+        <div class="what-happens">
+          <h4>After you submit</h4>
+          <div class="wh-step"><div class="wh-n">1</div><p><strong>We review your note</strong> and confirm whether your situation fits our practice.</p></div>
+          <div class="wh-step"><div class="wh-n">2</div><p><strong>We schedule a 30-minute orientation call</strong> — typically within a few business days.</p></div>
+          <div class="wh-step"><div class="wh-n">3</div><p><strong>On the call</strong>, we discuss your household context, assets, and goals. You'll leave with a clear picture of what the process looks like and what it costs.</p></div>
+          <div class="wh-step"><div class="wh-n">4</div><p><strong>No pressure.</strong> If we're not the right fit, we'll tell you — and point you somewhere useful.</p></div>
+        </div>
+
+        <h3 style="margin-top:1.25rem;">Which option are you considering?</h3>
+        <p style="margin-bottom:1rem;">Not sure yet? That's fine — we'll sort it out on the call.</p>
+        <div class="option-pills">
+          <label class="option-pill"><input type="radio" name="option" value="simple"><div><span class="pill-label">Simple Trust Plan</span><span class="pill-sub">Documents + personal guidance through signing and implementation</span></div></label>
+          <label class="option-pill"><input type="radio" name="option" value="full"><div><span class="pill-label">Full Advisory Service</span><span class="pill-sub">Complete coordination — deed recording, account retitling, beneficiary updates, funding proof file</span></div></label>
+          <label class="option-pill"><input type="radio" name="option" value="existing"><div><span class="pill-label">I have existing documents that were never funded</span><span class="pill-sub">Review what exists and complete implementation</span></div></label>
+          <label class="option-pill"><input type="radio" name="option" value="unsure"><div><span class="pill-label">Not sure yet — want to talk it through</span><span class="pill-sub">We'll figure it out together on the call</span></div></label>
+        </div>
+
+        <div class="mtp-alt">
+          <p><strong style="color:rgba(255,255,255,.75);">Looking for a lower-cost starting point?</strong> Our sister site <a href="https://michianatrustplanning.com" target="_blank">Michiana Trust Planning</a> offers attorney-reviewed Indiana trust document bundles starting at $99 — with a complete funding guide included. Great for organized families who can handle the process independently.</p>
+        </div>
+      </div>
+
+      <div class="fi fi-d1">
+        <div class="form-card">
+          <h3>Send a Note</h3>
+          <p class="fc-sub">We'll follow up within one business day.</p>
+          <div id="contactForm">
+            <div class="field-row">
+              <div class="field"><label>First Name</label><input type="text" id="fname" placeholder="Jane"></div>
+              <div class="field"><label>Last Name</label><input type="text" id="lname" placeholder="Smith"></div>
+            </div>
+            <div class="field"><label>Email</label><input type="email" id="email" placeholder="jane@email.com"></div>
+            <div class="field"><label>Phone (optional)</label><input type="tel" id="phone" placeholder="(574) 555-0000"></div>
+            <div class="field">
+              <label>State</label>
+              <select id="state"><option value="">Select</option><option>Indiana</option><option>Michigan</option><option>Other</option></select>
+            </div>
+            <div class="field">
+              <label>Tell us a bit about your situation</label>
+              <textarea id="msg" placeholder="e.g. Married couple, own a home in St. Joseph County, two adult children. Have an old trust that was never funded..."></textarea>
+            </div>
+            <button class="form-submit" onclick="submitForm()">Send Inquiry →</button>
+            <p class="form-note">We respond within one business day. Your information is never shared or sold.<br>Email: <a href="/cdn-cgi/l/email-protection#2f444a465b476f4e414c47405d4e4b59465c405d5c41405d5b47014c4042" style="color:var(--gold);"><span class="__cf_email__" data-cfemail="640f010d100c24050a070c0b160500120d170b16170a0b16100c4a070b09">[email&#160;protected]</span></a></p>
+          </div>
+          <div class="form-success" id="formSuccess">
+            <div class="fs-icon">⚓</div>
+            <h3>We've got your note.</h3>
+            <p>Expect to hear from Keith within one business day to schedule a 30-minute orientation call.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site-footer"><div class="footer-in"><div class="footer-brand"><a href="index.html" style="display:flex;align-items:center;gap:.75rem;"><svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="16" stroke="#b07d2e" stroke-width="1.25" fill="none" opacity=".5"/><line x1="17" y1="8" x2="17" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="26" x2="23" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><path d="M11 20 Q8 21 8.5 24.5 Q11 27.5 11 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M23 20 Q26 21 25.5 24.5 Q23 27.5 23 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="12.5" y1="14" x2="21.5" y2="14" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><circle cx="17" cy="9.5" r="2" stroke="#b07d2e" stroke-width="1.25" fill="none"/></svg><span style="font-family:var(--serif);color:white;font-size:1rem;">Anchor Advisors North</span></a><p>Trust-based estate planning for Northern Indiana and Southwest Michigan families.</p></div><div class="footer-col"><h5>Pages</h5><ul><li><a href="index.html">Home</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="who-we-serve.html">Who We Serve</a></li><li><a href="about.html">About Keith</a></li><li><a href="inquire.html">Request Consultation</a></li></ul></div><div class="footer-col"><h5>Planning Options</h5><ul><li><a href="inquire.html">Simple Trust Plan</a></li><li><a href="inquire.html">Full Advisory Service</a></li><li><a href="https://michianatrustplanning.com" target="_blank">DIY Documents (MTP)</a></li></ul></div><div class="footer-col"><h5>Contact</h5><ul><li><a href="/cdn-cgi/l/email-protection#a7ccc2ced3cfe7c6c9c4cfc8d5c6c3d1ced4c8d5d4c9c8d5d3cf89c4c8ca"><span class="__cf_email__" data-cfemail="1e757b776a765e7f707d76716c7f7a68776d716c6d70716c6a76307d7173">[email&#160;protected]</span></a></li></ul></div></div><div class="footer-bottom"><span>© 2026 Anchor Advisors North · Keith Plummer, J.D.</span><span>Indiana-licensed attorney · Trust planning only</span></div></footer>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>function toggleNav(){document.getElementById('navLinks').classList.toggle('open');}function submitForm(){const e=document.getElementById('email').value;if(!e||!e.
