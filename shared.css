@@ -1,0 +1,210 @@
+/* ═══════════════════════════════════════════════════════
+   ANCHOR ADVISORS NORTH — Shared Design System
+   Aesthetic: Modern professional. Polished but grounded.
+   Navy & warm white, anchor motif, editorial typography.
+   Cormorant for display, DM Sans for UI clarity.
+═══════════════════════════════════════════════════════ */
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap');
+
+:root {
+  --navy:      #1c2b3a;
+  --navy2:     #243347;
+  --navy3:     #1a2535;
+  --gold:      #b07d2e;
+  --gold-lt:   #c99540;
+  --gold-bg:   rgba(176,125,46,.08);
+  --gold-br:   rgba(176,125,46,.22);
+  --warm:      #f5f1ea;
+  --warm2:     #edeae2;
+  --white:     #ffffff;
+  --text:      #253040;
+  --muted:     #6b7787;
+  --border:    rgba(28,43,58,.1);
+  --sage:      #3e6b52;
+  --serif:     'Cormorant Garamond', Georgia, serif;
+  --sans:      'DM Sans', sans-serif;
+  --shadow:    0 2px 20px rgba(28,43,58,.07);
+  --shadow-lg: 0 8px 48px rgba(28,43,58,.13);
+  --r:         10px;
+  --nav-h:     68px;
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--sans);
+  background: var(--warm);
+  color: var(--text);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+a { color: inherit; text-decoration: none; }
+img { max-width: 100%; }
+
+/* ── LAYOUT ──────────────────────────── */
+.wrap    { max-width: 1080px; margin: 0 auto; padding: 0 2rem; }
+.wrap-sm { max-width: 740px;  margin: 0 auto; padding: 0 2rem; }
+.wrap-xs { max-width: 600px;  margin: 0 auto; padding: 0 2rem; }
+
+/* ── TYPOGRAPHY ─────────────────────── */
+.eyebrow {
+  font-size: .68rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold); font-weight: 600; margin-bottom: .55rem;
+  font-family: var(--sans);
+}
+.eyebrow.light { color: var(--gold-lt); }
+
+h1, h2, h3 { font-family: var(--serif); }
+.sec-title {
+  font-size: clamp(2rem, 3.2vw, 2.9rem);
+  color: var(--navy); line-height: 1.15;
+  font-weight: 600; margin-bottom: .9rem;
+}
+.sec-title em  { color: var(--gold); font-style: italic; }
+.sec-title.light { color: var(--white); }
+.sec-title.light em { color: var(--gold-lt); }
+.sec-desc {
+  color: var(--muted); font-size: .97rem; max-width: 520px;
+  font-weight: 300; line-height: 1.8;
+}
+.sec-desc.light { color: rgba(255,255,255,.55); }
+.sec-desc.wide  { max-width: 680px; }
+
+/* ── NAV ─────────────────────────────── */
+.site-nav {
+  background: var(--navy3);
+  border-bottom: 1px solid rgba(176,125,46,.25);
+  position: sticky; top: 0; z-index: 300;
+  height: var(--nav-h);
+}
+.nav-in {
+  max-width: 1080px; margin: 0 auto; padding: 0 2rem;
+  height: 100%;
+  display: flex; align-items: center; justify-content: space-between;
+}
+.nav-logo { display: flex; align-items: center; gap: .85rem; }
+.nav-logo-mark { flex-shrink: 0; }
+.nav-logo-text {
+  display: flex; flex-direction: column; gap: 0;
+  line-height: 1;
+}
+.nav-logo-name {
+  font-family: var(--serif); font-size: 1.05rem;
+  color: var(--white); font-weight: 600; letter-spacing: .01em;
+}
+.nav-logo-sub {
+  font-size: .62rem; color: rgba(255,255,255,.38);
+  letter-spacing: .14em; text-transform: uppercase;
+  font-family: var(--sans); font-weight: 400;
+  margin-top: .2rem;
+}
+.nav-links {
+  display: flex; align-items: center; gap: .25rem; list-style: none;
+}
+.nav-links a {
+  color: rgba(255,255,255,.58); font-size: .84rem; font-weight: 400;
+  padding: .45rem .75rem; border-radius: 6px;
+  transition: color .18s, background .18s;
+  letter-spacing: .01em;
+}
+.nav-links a:hover { color: rgba(255,255,255,.9); background: rgba(255,255,255,.05); }
+.nav-links a.active { color: var(--white); }
+.nav-links a.nav-cta {
+  background: var(--gold); color: var(--white) !important;
+  padding: .42rem 1.1rem; margin-left: .5rem;
+  font-weight: 500;
+  transition: background .18s !important;
+}
+.nav-links a.nav-cta:hover { background: var(--gold-lt) !important; }
+.ham { display: none; cursor: pointer; padding: .4rem; }
+.ham span { display: block; width: 20px; height: 1.5px; background: rgba(255,255,255,.7); margin: 5px 0; transition: .2s; }
+
+/* ── BUTTONS ─────────────────────────── */
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  padding: .78rem 1.65rem; border-radius: var(--r);
+  font-family: var(--sans); font-size: .9rem; font-weight: 500;
+  cursor: pointer; transition: all .18s; border: none;
+  letter-spacing: .01em;
+}
+.btn-gold    { background: var(--gold);  color: var(--white); }
+.btn-gold:hover { background: var(--gold-lt); transform: translateY(-1px); }
+.btn-outline { background: transparent; color: rgba(255,255,255,.75); border: 1px solid rgba(255,255,255,.22); }
+.btn-outline:hover { border-color: rgba(255,255,255,.5); color: var(--white); }
+.btn-outline-dark { background: transparent; color: var(--navy); border: 1px solid var(--border); }
+.btn-outline-dark:hover { border-color: var(--gold); color: var(--gold); }
+
+/* ── CARDS ───────────────────────────── */
+.card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.75rem 1.6rem;
+  transition: box-shadow .2s, transform .2s;
+}
+.card:hover { box-shadow: var(--shadow-lg); transform: translateY(-2px); }
+
+/* ── SECTION ─────────────────────────── */
+.section { padding: 5.5rem 2rem; }
+.section.dark { background: var(--navy); }
+.section.mid  { background: var(--navy2); }
+.section.light { background: var(--warm); }
+.section.white { background: var(--white); }
+.section.warm2 { background: var(--warm2); }
+
+/* ── FADE IN ─────────────────────────── */
+/* Default: visible. JS adds 'will-fade' to body once loaded,
+   enabling animations only for below-fold elements. */
+.fi { opacity: 1; transform: none; }
+body.js-ready .fi {
+  opacity: 0; transform: translateY(14px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+body.js-ready .fi.vis { opacity: 1; transform: translateY(0); }
+body.js-ready .fi-d1 { transition-delay: .08s; }
+body.js-ready .fi-d2 { transition-delay: .16s; }
+body.js-ready .fi-d3 { transition-delay: .24s; }
+body.js-ready .fi-d4 { transition-delay: .32s; }
+
+/* ── FOOTER ──────────────────────────── */
+.site-footer {
+  background: #111d29;
+  padding: 3.5rem 2rem 2rem;
+  border-top: 1px solid rgba(255,255,255,.05);
+}
+.footer-in {
+  max-width: 1080px; margin: 0 auto;
+  display: grid; grid-template-columns: 1.6fr 1fr 1fr 1fr;
+  gap: 2.5rem; margin-bottom: 3rem;
+}
+.footer-brand p { font-size: .8rem; color: rgba(255,255,255,.35); line-height: 1.75; margin-top: .75rem; max-width: 230px; }
+.footer-col h5 { font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: rgba(255,255,255,.5); margin-bottom: .85rem; font-family: var(--sans); }
+.footer-col ul { list-style: none; display: flex; flex-direction: column; gap: .4rem; }
+.footer-col ul a { font-size: .82rem; color: rgba(255,255,255,.32); transition: color .18s; }
+.footer-col ul a:hover { color: var(--gold-lt); }
+.footer-bottom {
+  max-width: 1080px; margin: 0 auto;
+  padding-top: 1.5rem; border-top: 1px solid rgba(255,255,255,.06);
+  display: flex; justify-content: space-between; flex-wrap: wrap; gap: .5rem;
+  font-size: .73rem; color: rgba(255,255,255,.22);
+}
+
+/* ── RESPONSIVE ──────────────────────── */
+@media (max-width: 900px) {
+  .nav-links { display: none; }
+  .nav-links.open {
+    display: flex; flex-direction: column; position: fixed;
+    top: var(--nav-h); left: 0; right: 0; bottom: 0;
+    background: var(--navy3); padding: 2rem;
+    gap: .5rem; border-top: 1px solid rgba(255,255,255,.07);
+    overflow-y: auto;
+  }
+  .nav-links.open a { padding: .9rem 1rem; font-size: 1rem; border-bottom: 1px solid rgba(255,255,255,.05); border-radius: 0; }
+  .nav-links.open a.nav-cta { margin: 1rem 0 0; border-radius: var(--r); text-align: center; }
+  .ham { display: block; }
+  .footer-in { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 560px) {
+  .footer-in { grid-template-columns: 1fr; }
+  .wrap, .wrap-sm, .wrap-xs { padding: 0 1.25rem; }
+  .section { padding: 4rem 1.25rem; }
+}

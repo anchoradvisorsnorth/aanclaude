@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Anchor Advisors North — Trust-Based Estate Planning, Northern Indiana</title>
+<meta name="description" content="Revocable living trust-based estate planning for Northern Indiana families. Advisor-led. Done completely — from documents to funded.">
+<link rel="stylesheet" href="shared.css">
+<style>
+/* ── HOME-SPECIFIC ──────────────────────────────────────── */
+
+/* HERO */
+.hero {
+  background: var(--navy3);
+  padding: 7rem 2rem 6rem;
+  position: relative; overflow: hidden;
+  min-height: 92vh;
+  display: flex; align-items: center;
+}
+.hero-bg {
+  position: absolute; inset: 0; pointer-events: none;
+  background:
+    radial-gradient(ellipse 60% 80% at 80% 50%, rgba(176,125,46,.08) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 50% at 10% 90%, rgba(28,43,58,.8) 0%, transparent 60%);
+}
+/* Faint grid */
+.hero-grid {
+  position: absolute; inset: 0; pointer-events: none;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,.018) 1px, transparent 1px);
+  background-size: 56px 56px;
+}
+/* Anchor watermark */
+.hero-anchor-bg {
+  position: absolute; right: -4rem; top: 50%; transform: translateY(-50%);
+  opacity: .04; pointer-events: none;
+}
+.hero-in {
+  position: relative; z-index: 1;
+  max-width: 1080px; margin: 0 auto; width: 100%;
+  display: grid; grid-template-columns: 1fr 400px; gap: 5rem; align-items: center;
+}
+.hero-badge {
+  display: inline-flex; align-items: center; gap: .5rem;
+  background: var(--gold-bg); border: 1px solid var(--gold-br);
+  color: var(--gold-lt); font-size: .68rem; letter-spacing: .15em;
+  text-transform: uppercase; padding: .38rem 1rem; border-radius: 2rem;
+  margin-bottom: 1.85rem; font-weight: 600;
+}
+.hero h1 {
+  font-family: var(--serif);
+  font-size: clamp(2.8rem, 5vw, 4.4rem);
+  color: var(--white); line-height: 1.1;
+  font-weight: 600; margin-bottom: 1.5rem;
+  letter-spacing: -.015em;
+}
+.hero h1 em { color: var(--gold-lt); font-style: italic; }
+.hero-sub {
+  font-size: 1.05rem; color: rgba(255,255,255,.55);
+  margin-bottom: 2.5rem; font-weight: 300;
+  max-width: 480px; line-height: 1.8;
+}
+.hero-ctas { display: flex; gap: 1rem; flex-wrap: wrap; }
+
+/* PROOF CARD */
+.proof-card {
+  background: rgba(255,255,255,.06);
+  border: 1px solid rgba(255,255,255,.1);
+  border-radius: 16px; overflow: hidden;
+  backdrop-filter: blur(6px);
+}
+.pc-header {
+  background: rgba(176,125,46,.15);
+  border-bottom: 1px solid rgba(176,125,46,.2);
+  padding: 1.1rem 1.5rem;
+  display: flex; align-items: center; gap: .65rem;
+}
+.pc-header-icon { font-size: 1rem; }
+.pc-header span {
+  font-size: .72rem; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--gold-lt); font-weight: 600;
+}
+.pc-row {
+  display: flex; align-items: flex-start; gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  transition: background .18s;
+}
+.pc-row:last-child { border-bottom: none; }
+.pc-row:hover { background: rgba(255,255,255,.03); }
+.pc-check {
+  width: 1.5rem; height: 1.5rem; border-radius: 50%;
+  background: rgba(62,107,82,.25); border: 1px solid rgba(62,107,82,.4);
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: .1rem; font-size: .7rem;
+}
+.pc-body h4 { font-size: .88rem; font-weight: 500; color: var(--white); margin-bottom: .12rem; }
+.pc-body p  { font-size: .76rem; color: rgba(255,255,255,.38); line-height: 1.5; }
+
+/* SCROLL INDICATOR */
+.scroll-hint {
+  position: absolute; bottom: 2rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: .4rem;
+  color: rgba(255,255,255,.25); font-size: .68rem; letter-spacing: .12em;
+  text-transform: uppercase; z-index: 1;
+  animation: bounce 2s ease-in-out infinite;
+}
+.scroll-hint svg { opacity: .4; }
+@keyframes bounce { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(6px)} }
+
+/* DIVIDER STRIP */
+.divider-strip {
+  background: var(--navy2);
+  border-top: 1px solid rgba(176,125,46,.18);
+  border-bottom: 1px solid rgba(176,125,46,.18);
+  padding: 1.1rem 2rem;
+}
+.ds-in {
+  max-width: 1080px; margin: 0 auto;
+  display: flex; justify-content: center; gap: 3rem; flex-wrap: wrap;
+}
+.ds-item {
+  display: flex; align-items: center; gap: .6rem;
+  font-size: .78rem; color: rgba(255,255,255,.45);
+}
+.ds-item svg { opacity: .55; }
+
+/* PROBLEM SECTION */
+.problem-in {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;
+  margin-top: 3rem;
+}
+.p-card {
+  border-radius: var(--r); padding: 1.85rem 1.7rem;
+  position: relative; overflow: hidden;
+}
+.p-card.bad  { background: rgba(200,60,60,.06); border: 1px solid rgba(200,60,60,.18); }
+.p-card.good { background: rgba(62,107,82,.07); border: 1px solid rgba(62,107,82,.22); }
+.p-card h3 { font-family: var(--serif); font-size: 1.25rem; margin-bottom: .75rem; }
+.p-card.bad  h3 { color: #c03c3c; }
+.p-card.good h3 { color: var(--sage); }
+.p-card p { font-size: .9rem; color: var(--text); line-height: 1.75; }
+.p-card ul { list-style: none; margin-top: .85rem; display: flex; flex-direction: column; gap: .45rem; }
+.p-card.bad  ul li::before { content: '✗ '; color: #c03c3c; font-weight: 700; }
+.p-card.good ul li::before { content: '✓ '; color: var(--sage); font-weight: 700; }
+.p-card ul li { font-size: .88rem; color: var(--text); }
+
+/* LADDER / OPTIONS PREVIEW */
+.options-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem;
+  margin-top: 3rem;
+}
+.opt-card {
+  border-radius: var(--r);
+  border: 1px solid rgba(255,255,255,.08);
+  background: rgba(255,255,255,.04);
+  padding: 1.75rem 1.5rem;
+  position: relative; overflow: hidden;
+  transition: border-color .2s, background .2s;
+  display: flex; flex-direction: column;
+}
+.opt-card:hover {
+  border-color: rgba(176,125,46,.3);
+  background: rgba(255,255,255,.06);
+}
+.opt-card.featured {
+  background: rgba(176,125,46,.1);
+  border-color: rgba(176,125,46,.35);
+}
+.opt-step {
+  font-size: .63rem; letter-spacing: .2em; text-transform: uppercase;
+  color: var(--gold-lt); font-weight: 600; margin-bottom: .5rem;
+}
+.opt-card h3 {
+  font-family: var(--serif); font-size: 1.4rem; color: var(--white);
+  margin-bottom: .5rem; line-height: 1.2;
+}
+.opt-price {
+  font-size: .95rem; color: var(--gold-lt);
+  margin-bottom: .85rem; font-weight: 300;
+}
+.opt-desc { font-size: .85rem; color: rgba(255,255,255,.48); line-height: 1.7; flex: 1; }
+.opt-link {
+  display: inline-flex; align-items: center; gap: .4rem;
+  margin-top: 1.25rem; font-size: .82rem; font-weight: 500;
+  color: var(--gold-lt); transition: gap .18s;
+}
+.opt-card:hover .opt-link { gap: .6rem; }
+
+/* KEITH TEASER */
+.keith-in {
+  display: grid; grid-template-columns: 340px 1fr; gap: 4.5rem;
+  align-items: center;
+}
+.keith-photo-block {
+  position: relative;
+}
+.keith-photo-placeholder {
+  width: 100%; aspect-ratio: 3/4;
+  background: linear-gradient(145deg, var(--navy2) 0%, var(--navy3) 100%);
+  border-radius: 14px;
+  display: flex; align-items: center; justify-content: center;
+  border: 1px solid rgba(255,255,255,.08);
+  overflow: hidden;
+}
+.keith-photo-placeholder svg { opacity: .15; }
+.keith-photo-tag {
+  position: absolute; bottom: -1rem; right: -1rem;
+  background: var(--gold); color: var(--white);
+  padding: .65rem 1.15rem; border-radius: var(--r);
+  font-size: .78rem; font-weight: 600; line-height: 1.4;
+  box-shadow: var(--shadow-lg);
+}
+.keith-text .eyebrow { margin-bottom: .6rem; }
+.keith-text h2 { margin-bottom: 1rem; }
+.keith-text p { font-size: .95rem; color: var(--muted); margin-bottom: 1rem; line-height: 1.8; }
+.keith-creds {
+  display: flex; flex-direction: column; gap: .5rem; margin: 1.5rem 0;
+}
+.kc-item {
+  display: flex; align-items: center; gap: .75rem;
+  font-size: .85rem; color: var(--text);
+}
+.kc-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: var(--gold); flex-shrink: 0;
+}
+
+/* PROCESS STRIP */
+.process-steps {
+  display: grid; grid-template-columns: repeat(4, 1fr);
+  gap: 0; margin-top: 3.5rem;
+  border: 1px solid var(--border); border-radius: var(--r);
+  overflow: hidden;
+}
+.ps-item {
+  padding: 1.85rem 1.6rem; background: var(--white);
+  border-right: 1px solid var(--border);
+  position: relative; transition: background .2s;
+}
+.ps-item:last-child { border-right: none; }
+.ps-item:hover { background: var(--warm); }
+.ps-num {
+  font-family: var(--serif); font-size: 2.4rem; color: var(--gold);
+  line-height: 1; margin-bottom: .85rem; font-weight: 600;
+}
+.ps-item h3 { font-family: var(--serif); font-size: 1.1rem; color: var(--navy); margin-bottom: .45rem; }
+.ps-item p  { font-size: .83rem; color: var(--muted); line-height: 1.7; }
+
+/* QUOTE / CTA BANNER */
+.cta-banner {
+  background: var(--navy3);
+  border-top: 1px solid rgba(176,125,46,.2);
+  border-bottom: 1px solid rgba(176,125,46,.2);
+  padding: 5rem 2rem; text-align: center;
+}
+.cta-banner blockquote {
+  font-family: var(--serif); font-size: clamp(1.5rem, 2.5vw, 2.2rem);
+  color: var(--white); line-height: 1.4; max-width: 720px;
+  margin: 0 auto 1rem; font-style: italic; font-weight: 400;
+}
+.cta-banner blockquote em { color: var(--gold-lt); font-style: normal; }
+.cta-banner cite { font-size: .8rem; color: rgba(255,255,255,.35); display: block; margin-bottom: 2.5rem; }
+
+@media (max-width: 900px) {
+  .hero-in { grid-template-columns: 1fr; gap: 3rem; }
+  .hero { min-height: auto; padding: 5rem 1.25rem 4rem; }
+  .hero-anchor-bg { display: none; }
+  .problem-in { grid-template-columns: 1fr; }
+  .options-grid { grid-template-columns: 1fr; }
+  .keith-in { grid-template-columns: 1fr; }
+  .keith-photo-block { max-width: 300px; margin: 0 auto; }
+  .process-steps { grid-template-columns: 1fr 1fr; }
+  .ps-item { border-bottom: 1px solid var(--border); }
+}
+@media (max-width: 560px) {
+  .process-steps { grid-template-columns: 1fr; }
+  .ds-in { gap: 1.25rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="site-nav">
+  <div class="nav-in">
+    <a href="index.html" class="nav-logo">
+      <!-- Anchor SVG Logo -->
+      <div class="nav-logo-mark">
+        <svg width="34" height="34" viewBox="0 0 34 34" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="17" cy="17" r="16" stroke="#b07d2e" stroke-width="1.25" fill="none" opacity=".5"/>
+          <!-- Anchor shape -->
+          <line x1="17" y1="8" x2="17" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/>
+          <line x1="11" y1="26" x2="23" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/>
+          <path d="M11 20 Q8 21 8.5 24.5 Q11 27.5 11 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <path d="M23 20 Q26 21 25.5 24.5 Q23 27.5 23 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+          <!-- Crossbar -->
+          <line x1="12.5" y1="14" x2="21.5" y2="14" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/>
+          <!-- Ring at top -->
+          <circle cx="17" cy="9.5" r="2" stroke="#b07d2e" stroke-width="1.25" fill="none"/>
+        </svg>
+      </div>
+      <div class="nav-logo-text">
+        <span class="nav-logo-name">Anchor Advisors North</span>
+        <span class="nav-logo-sub">Trust Planning · Northern Indiana</span>
+      </div>
+    </a>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="index.html" class="active">Home</a></li>
+      <li><a href="how-it-works.html">How It Works</a></li>
+      <li><a href="who-we-serve.html">Who We Serve</a></li>
+      <li><a href="about.html">About Keith</a></li>
+      <li><a href="inquire.html" class="nav-cta">Request Consultation</a></li>
+    </ul>
+    <div class="ham" id="ham" onclick="toggleNav()">
+      <span></span><span></span><span></span>
+    </div>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <!-- Watermark anchor -->
+  <div class="hero-anchor-bg">
+    <svg width="500" height="500" viewBox="0 0 500 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="250" cy="250" r="240" stroke="white" stroke-width="8" fill="none"/>
+      <line x1="250" y1="80" x2="250" y2="420" stroke="white" stroke-width="14"/>
+      <line x1="120" y1="420" x2="380" y2="420" stroke="white" stroke-width="14"/>
+      <path d="M120 330 Q60 345 65 400 Q120 455 120 420" stroke="white" stroke-width="14" fill="none"/>
+      <path d="M380 330 Q440 345 435 400 Q380 455 380 420" stroke="white" stroke-width="14" fill="none"/>
+      <line x1="170" y1="195" x2="330" y2="195" stroke="white" stroke-width="14"/>
+      <circle cx="250" cy="100" r="28" stroke="white" stroke-width="10" fill="none"/>
+    </svg>
+  </div>
+
+  <div class="hero-in">
+    <div>
+      <div class="hero-badge">Northern Indiana · Advisor-Led</div>
+      <h1 class="fi fi-d1">Plans that work<br>in practice,<br>not just <em>on paper.</em></h1>
+      <p class="hero-sub fi fi-d2">Revocable living trust-based estate planning for Michiana families — from document preparation through fully funded and complete. Guided by Keith Plummer, J.D.</p>
+      <div class="hero-ctas fi fi-d3">
+        <a href="inquire.html" class="btn btn-gold">Request a Consultation</a>
+        <a href="how-it-works.html" class="btn btn-outline">See How It Works</a>
+      </div>
+    </div>
+    <div class="fi fi-d2">
+      <div class="proof-card">
+        <div class="pc-header">
+          <span class="pc-header-icon">⚓</span>
+          <span>What "complete" means here</span>
+        </div>
+        <div class="pc-row">
+          <div class="pc-check">✓</div>
+          <div class="pc-body">
+            <h4>All 7 Indiana documents prepared</h4>
+            <p>Trust, will, POA, health care rep, certificate, deed & assignment</p>
+          </div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-check">✓</div>
+          <div class="pc-body">
+            <h4>Real estate retitled & recorded</h4>
+            <p>Quitclaim Deed filed with your Indiana county — not just drafted</p>
+          </div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-check">✓</div>
+          <div class="pc-body">
+            <h4>Accounts & beneficiaries aligned</h4>
+            <p>Bank, brokerage, and retirement coordinated with trust terms</p>
+          </div>
+        </div>
+        <div class="pc-row">
+          <div class="pc-check">✓</div>
+          <div class="pc-body">
+            <h4>Completion review & funding file</h4>
+            <p>Every transfer documented and verified before we close</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="scroll-hint">
+    <svg width="16" height="20" viewBox="0 0 16 20" fill="none"><rect x="1" y="1" width="14" height="18" rx="7" stroke="white" stroke-width="1.5"/><circle cx="8" cy="7" r="2" fill="white"/></svg>
+    Scroll
+  </div>
+</section>
+
+<!-- DIVIDER STRIP -->
+<div class="divider-strip">
+  <div class="ds-in">
+    <div class="ds-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#b07d2e" stroke-width="1.2"/><path d="M4 7l2 2 4-4" stroke="#b07d2e" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Indiana-licensed advisor
+    </div>
+    <div class="ds-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#b07d2e" stroke-width="1.2"/><path d="M4 7l2 2 4-4" stroke="#b07d2e" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Trust planning only — no generalist work
+    </div>
+    <div class="ds-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#b07d2e" stroke-width="1.2"/><path d="M4 7l2 2 4-4" stroke="#b07d2e" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Michiana-based & locally focused
+    </div>
+    <div class="ds-item">
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="6" stroke="#b07d2e" stroke-width="1.2"/><path d="M4 7l2 2 4-4" stroke="#b07d2e" stroke-width="1.2" stroke-linecap="round"/></svg>
+      Funded plans, not just filed documents
+    </div>
+  </div>
+</div>
+
+<!-- PROBLEM -->
+<section class="section light fi" id="why">
+  <div class="wrap">
+    <div class="eyebrow">The Core Problem</div>
+    <h2 class="sec-title">Most estate plans fail in <em>execution,</em> not drafting.</h2>
+    <p class="sec-desc">Documents get signed. Assets stay put. Beneficiaries go stale. The trust sits in a drawer — legally valid and functionally useless.</p>
+    <div class="problem-in">
+      <div class="p-card bad fi">
+        <h3>What most families end up with</h3>
+        <p>A signed trust that holds no assets. A will nobody can find. Real estate still titled in their own names. Beneficiary designations last updated in 2009.</p>
+        <ul>
+          <li>Estate goes to probate anyway</li>
+          <li>Family spends months untangling accounts</li>
+          <li>Minor children's guardianship unaddressed</li>
+          <li>Incapacity triggers costly court proceedings</li>
+          <li>Plan never funded — the whole point missed</li>
+        </ul>
+      </div>
+      <div class="p-card good fi fi-d1">
+        <h3>What a functioning plan looks like</h3>
+        <p>Correctly executed documents. Real estate retitled and recorded. Accounts aligned. Beneficiary designations reviewed and current.</p>
+        <ul>
+          <li>Assets pass privately, without probate</li>
+          <li>Family receives what you intended</li>
+          <li>Successor trustee steps in without court</li>
+          <li>Medical and financial decisions covered</li>
+          <li>Documented, verified, and complete</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- OPTIONS / LADDER -->
+<section class="section dark fi">
+  <div class="wrap">
+    <div class="eyebrow light">Planning Options</div>
+    <h2 class="sec-title light">The right level of support<br>for <em>your</em> situation.</h2>
+    <p class="sec-desc light">Some families want documents. Some want documents with a guide. Some want full coordination from start to funded. There's a path for each.</p>
+    <div class="options-grid">
+
+      <div class="opt-card fi">
+        <div class="opt-step">Entry point</div>
+        <h3>DIY Documents</h3>
+        <div class="opt-price">$99 – $299 · self-serve</div>
+        <p class="opt-desc">Indiana trust documents, reviewed and advisor-approved, delivered in minutes. For organized families who can handle the process independently. Via our sister site.</p>
+        <a href="https://michianatrustplanning.com" target="_blank" class="opt-link">
+          MichianaTP.com →
+        </a>
+      </div>
+
+      <div class="opt-card featured fi fi-d1">
+        <div class="opt-step">Guided option · most popular</div>
+        <h3>Simple Trust Plan</h3>
+        <div class="opt-price">Flat fee · contact for pricing</div>
+        <p class="opt-desc">The same professionally prepared documents — with Keith guiding you through every step. Intake consultation, implementation roadmap, and direct support through signing and funding.</p>
+        <a href="inquire.html" class="opt-link">Request consultation →</a>
+      </div>
+
+      <div class="opt-card fi fi-d2">
+        <div class="opt-step">Full coordination</div>
+        <h3>Full Advisory</h3>
+        <div class="opt-price">Flat fee · contact for pricing</div>
+        <p class="opt-desc">Complete coordination from intake through funded. Deed preparation and recording, account retitling, beneficiary review, and a documented funding proof file. For families with real estate, multiple accounts, or blended family considerations.</p>
+        <a href="inquire.html" class="opt-link">Request consultation →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS PREVIEW -->
+<section class="section white fi">
+  <div class="wrap">
+    <div class="eyebrow">How It Works</div>
+    <h2 class="sec-title">Four stages. Clear next steps <em>throughout.</em></h2>
+    <p class="sec-desc">No guessing. No unclear next steps. A structured path from conversation to complete.</p>
+    <div class="process-steps">
+      <div class="ps-item fi">
+        <div class="ps-num">01</div>
+        <h3>Orientation</h3>
+        <p>Define your priorities, household context, and asset picture. Confirm which planning level fits your situation.</p>
+      </div>
+      <div class="ps-item fi fi-d1">
+        <div class="ps-num">02</div>
+        <h3>Design</h3>
+        <p>Set the trust structure — trustees, beneficiaries, distribution terms, and companion documents aligned to your situation.</p>
+      </div>
+      <div class="ps-item fi fi-d2">
+        <div class="ps-num">03</div>
+        <h3>Documents</h3>
+        <p>Prepare, review, and execute all Indiana trust documents. Clear guidance on signing order, witnesses, and notarization.</p>
+      </div>
+      <div class="ps-item fi fi-d3">
+        <div class="ps-num">04</div>
+        <h3>Implementation</h3>
+        <p>Coordinate titling, deed recording, account retitling, and beneficiary updates. Verify and document completion.</p>
+      </div>
+    </div>
+    <div style="text-align:center; margin-top:2rem;">
+      <a href="how-it-works.html" class="btn btn-outline-dark">Full Process Overview →</a>
+    </div>
+  </div>
+</section>
+
+<!-- KEITH TEASER -->
+<section class="section warm2 fi" id="about">
+  <div class="wrap">
+    <div class="keith-in">
+      <div class="keith-photo-block">
+        <div class="keith-photo-placeholder">
+          <!-- Placeholder until photo uploaded — replace with <img src="assets/keith-plummer.jpg"> -->
+          <svg width="100" height="120" viewBox="0 0 100 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="38" r="28" stroke="white" stroke-width="2"/>
+            <path d="M5 110 Q5 80 50 80 Q95 80 95 110" stroke="white" stroke-width="2" fill="none"/>
+          </svg>
+        </div>
+        <div class="keith-photo-tag">
+          Keith Plummer, J.D.<br>
+          <span style="font-weight:300;font-size:.7rem;opacity:.8;">Trust Planning Advisor</span>
+        </div>
+      </div>
+      <div class="keith-text">
+        <div class="eyebrow">About Keith Plummer</div>
+        <h2 class="sec-title">Estate planning the way it <em>should</em> work.</h2>
+        <p>Anchor Advisors North started the same way most families begin thinking about estate planning — a question from parents and close friends who wanted a simple plan that would work, but found the process expensive, confusing, and hard to navigate.</p>
+        <p>After seeing the gap between what most Michiana households actually need and what they're often sold, the answer became clear: most families need a well-drafted trust, the right companion documents, and someone who will make sure the plan is actually implemented — not just filed.</p>
+        <div class="keith-creds">
+          <div class="kc-item"><div class="kc-dot"></div>Indiana-licensed — trust planning focused</div>
+          <div class="kc-item"><div class="kc-dot"></div>Trust & estate planning focus</div>
+          <div class="kc-item"><div class="kc-dot"></div>Northern Indiana & Southwest Michigan</div>
+          <div class="kc-item"><div class="kc-dot"></div>Completion-oriented — funded plans, not just signed ones</div>
+        </div>
+        <a href="about.html" class="btn btn-outline-dark">Full Bio & Background →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BANNER -->
+<div class="cta-banner fi">
+  <blockquote>"A trust is not magic. It works only when assets are properly aligned <em>with the structure.</em>"</blockquote>
+  <cite>— Anchor Advisors North</cite>
+  <div>
+    <a href="inquire.html" class="btn btn-gold" style="font-size:1rem;padding:.9rem 2rem;">Request a Consultation</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-in">
+    <div class="footer-brand">
+      <a href="index.html" style="display:flex;align-items:center;gap:.75rem;">
+        <svg width="28" height="28" viewBox="0 0 34 34" fill="none"><circle cx="17" cy="17" r="16" stroke="#b07d2e" stroke-width="1.25" fill="none" opacity=".5"/><line x1="17" y1="8" x2="17" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><line x1="11" y1="26" x2="23" y2="26" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><path d="M11 20 Q8 21 8.5 24.5 Q11 27.5 11 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/><path d="M23 20 Q26 21 25.5 24.5 Q23 27.5 23 26" stroke="#b07d2e" stroke-width="1.5" fill="none" stroke-linecap="round"/><line x1="12.5" y1="14" x2="21.5" y2="14" stroke="#b07d2e" stroke-width="1.5" stroke-linecap="round"/><circle cx="17" cy="9.5" r="2" stroke="#b07d2e" stroke-width="1.25" fill="none"/></svg>
+        <span style="font-family:var(--serif);color:white;font-size:1rem;">Anchor Advisors North</span>
+      </a>
+      <p>Trust-based estate planning for Northern Indiana and Southwest Michigan families. Advisor-led. Done completely.</p>
+    </div>
+    <div class="footer-col">
+      <h5>Pages</h5>
+      <ul>
+        <li><a href="index.html">Home</a></li>
+        <li><a href="how-it-works.html">How It Works</a></li>
+        <li><a href="who-we-serve.html">Who We Serve</a></li>
+        <li><a href="about.html">About Keith</a></li>
+        <li><a href="inquire.html">Request Consultation</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Planning Options</h5>
+      <ul>
+        <li><a href="inquire.html">Simple Trust Plan</a></li>
+        <li><a href="inquire.html">Full Advisory Service</a></li>
+        <li><a href="https://michianatrustplanning.com" target="_blank">DIY Documents (MTP)</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Contact</h5>
+      <ul>
+        <li><a href="inquire.html">Request Consultation</a></li>
+        <li><a href="/cdn-cgi/l/email-protection#0368666a776b43626d606b6c716267756a706c71706d6c71776b2d606c6e"><span class="__cf_email__" data-cfemail="3f545a564b577f5e515c57504d5e5b49564c504d4c51504d4b57115c5052">[email&#160;protected]</span></a></li>
+        <li><a href="#">Northern Indiana & SW Michigan</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Anchor Advisors North · anchoradvisorsnorth.com · Keith Plummer, J.D.</span>
+    <span>Indiana-licensed advisor · Trust planning only</span>
+  </div>
+</footer>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script>
+<script>
+function toggleNav() {
+  const n = document.getElementById('navLinks');
+  const h = document.getElementById('ham');
+  n.classList.toggle('open');
+  h.classList.toggle('open');
+}
+// Fade-in: visible by default, animate only below-fold elements
+document.body.classList.add('js-ready');
+const _vp = window.innerHeight;
+const _obs = new IntersectionObserver(
+  es => es.forEach(e => { if (e.isIntersecting) e.target.classList.add('vis'); }),
+  { threshold: 0.01 }
+);
+document.querySelectorAll('.fi').forEach(el => {
+  if (el.getBoundingClientRect().top < _vp) { el.classList.add('vis'); }
+  else { _obs.observe(el); }
+});
+</script>
+</body>
+</html>
