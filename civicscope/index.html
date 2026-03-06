@@ -255,7 +255,7 @@
       </div>
       <div class="field">
         <label>Municipality <span class="req">*</span></label>
-        <input type="text" id="location" placeholder="Auto-filled from ZIP" />
+        <input type="text" id="location" placeholder="City of Mishawaka" />
       </div>
     </div>
   </div>
@@ -516,9 +516,8 @@ async function handleZip(zip) {
     if (!resp.ok) throw new Error('Not found');
     const data = await resp.json();
     const place = data.places[0];
-    document.getElementById('state').value = place['state'];
-    document.getElementById('location').value = place['place name'];
-    document.getElementById('gateMunicipality').value = place['place name'];
+    document.getElementById('state').value = place['state']
+    document.getElementById('gateMunicipality').value = '';
     document.getElementById('zipStatus').textContent = `✓ ${place['place name']}, ${place['state abbreviation']}`;
     document.getElementById('zipStatus').style.color = 'var(--green)';
   } catch {
@@ -721,7 +720,7 @@ Rules:
     updateProcCallout(rd.low, rd.high);
 
     // Pre-fill gate municipality
-    document.getElementById('gateMunicipality').value = location;
+    document.getElementById('gateMunicipality').value = '';
 
     // Show results
     divider.style.display = 'block';
