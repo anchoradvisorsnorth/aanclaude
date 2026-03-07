@@ -199,7 +199,23 @@
   /* Disclaimer */
   .disclaimer { font-size: 0.72rem; color: var(--muted); line-height: 1.5; border-top: 1px solid var(--rule); padding-top: 16px; font-style: italic; margin-bottom: 24px; }
 
-  /* Footer */
+  /* Clarifying Questions Modal */
+  .clarify-overlay { position: fixed; inset: 0; background: rgba(26,26,24,0.6); z-index: 1000; display: flex; align-items: center; justify-content: center; padding: 20px; backdrop-filter: blur(2px); }
+  .clarify-modal { background: var(--paper); border: 2px solid var(--ink); max-width: 560px; width: 100%; padding: 36px; position: relative; }
+  .clarify-eyebrow { font-family: 'IBM Plex Mono', monospace; font-size: 0.62rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--amber); margin-bottom: 10px; }
+  .clarify-title { font-family: 'Libre Baskerville', serif; font-size: 1.2rem; font-weight: 700; margin-bottom: 8px; }
+  .clarify-subtitle { font-size: 0.85rem; color: var(--muted); line-height: 1.55; margin-bottom: 28px; }
+  .clarify-questions { display: flex; flex-direction: column; gap: 20px; margin-bottom: 28px; }
+  .clarify-q { display: flex; flex-direction: column; gap: 7px; }
+  .clarify-q label { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--ink); font-weight: 500; }
+  .clarify-q textarea { font-family: 'IBM Plex Sans', sans-serif; font-size: 0.9rem; color: var(--ink); background: white; border: 1.5px solid var(--rule); border-radius: 2px; padding: 10px 14px; outline: none; transition: border-color 0.15s; width: 100%; resize: vertical; min-height: 64px; }
+  .clarify-q textarea:focus { border-color: var(--accent); }
+  .clarify-actions { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .clarify-skip { font-family: 'IBM Plex Mono', monospace; font-size: 0.7rem; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); background: transparent; border: 1px solid var(--rule); padding: 10px 18px; cursor: pointer; border-radius: 2px; transition: all 0.15s; }
+  .clarify-skip:hover { border-color: var(--ink); color: var(--ink); }
+  .clarify-hint { font-size: 0.75rem; color: var(--muted); font-style: italic; }
+
+    /* Footer */
   footer { border-top: 1px solid var(--rule); padding: 20px 40px; font-family: 'IBM Plex Mono', monospace; font-size: 0.65rem; color: var(--muted); letter-spacing: 0.06em; display: flex; justify-content: space-between; }
 
   /* Responsive */
@@ -491,6 +507,24 @@
     </div>
 
   </div>
+
+<!-- ── CLARIFYING QUESTIONS MODAL ── -->
+<div class="clarify-overlay" id="clarifyOverlay" style="display:none">
+  <div class="clarify-modal">
+    <div class="clarify-eyebrow">One moment — quick clarification</div>
+    <div class="clarify-title" id="clarifyTitle">A few details will sharpen your estimate</div>
+    <div class="clarify-subtitle" id="clarifySubtitle">Your description gives us a good starting point. Answering these questions will move your confidence level from <strong>Low</strong> to <strong>Moderate or High</strong> — and narrow the cost range.</div>
+    <div class="clarify-questions" id="clarifyQuestions">
+      <!-- Populated dynamically -->
+    </div>
+    <div class="clarify-actions">
+      <button class="primary" onclick="submitClarifications()">Sharpen My Estimate</button>
+      <button class="clarify-skip" onclick="skipClarifications()">Skip — run with what I have</button>
+      <span class="clarify-hint">Takes 30 seconds</span>
+    </div>
+  </div>
+</div>
+
 </main>
 
 <footer>
@@ -665,6 +699,38 @@ async function runFeasibility() {
     alert('Please fill in your location, select a project type, and describe your project.');
     return;
   }
+
+  // Bundle run data for potential clarify flow
+  _pendingRunData = { zip, location, state, type, buildType, scope, topo, utils, imgSearch };
+
+  // Check if description is too vague to get a confident estimate
+  const vagueness = scoreVagueness(scope, type);
+  if (vagueness >= 0.45) {
+    // Show loading indicator while generating questions
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.textContent = 'Preparing clarifying questions...';
+    try {
+      const questions = await callClaudeRaw(`You are helping a municipal official get a better construction cost estimate. They described their project as:\n\nPROJECT TYPE: ${type}\nSTATE: ${state}\nDESCRIPTION: "${scope}"\n\nGenerate exactly 2 clarifying questions that would most improve the accuracy of a construction cost estimate. Focus on the single highest-impact unknown — usually size/scale, then functional specifics.\n\nRules:\n- Only ask what is NOT already answered above\n- Short, plain-language question labels (5-8 words)\n- Conversational placeholder examples\n\nRespond ONLY with valid JSON array, no markdown:\n[\n  { "id": "q1", "label": "Short question label", "placeholder": "e.g. example answer..." },\n  { "id": "q2", "label": "Short question label", "placeholder": "e.g. example answer..." }\n]`);
+      if (questions && questions.length > 0) {
+        btn.disabled = false;
+        btn.textContent = 'Run Feasibility Check';
+        showClarifyModal(questions);
+        return;
+      }
+    } catch(e) {
+      // If question generation fails, just run normally
+    }
+    btn.disabled = false;
+    btn.textContent = 'Run Feasibility Check';
+  }
+
+  await executeRun(_pendingRunData);
+}
+
+// ── Execute the actual feasibility run ───────────────────────────────
+async function executeRun(runData) {
+  const { zip, location, state, type, buildType, scope, topo, utils, imgSearch } = runData;
 
   const btn = document.getElementById('submitBtn');
   const loading = document.getElementById('loading');
@@ -923,6 +989,128 @@ async function submitLead() {
     gateBtn.textContent = 'Email Me This Report';
     alert('Something went wrong. Please try again.');
   }
+}
+
+
+// ── Clarifying Questions System ─────────────────────────────────────
+// State
+let _clarifyQuestions = [];
+let _pendingRunData = null;
+
+// Score how vague a scope description is (0 = very detailed, 1 = very vague)
+function scoreVagueness(scope, projectType) {
+  const words = scope.trim().split(/\s+/).length;
+  const hasNumbers = /\d/.test(scope);
+  const hasSF = /sq\s*ft|square\s*feet|sf|bays?|stall|court|room/i.test(scope);
+  const hasSize = /small|large|medium|\d+[x-]\d+|\d+\s*(bay|stall|court)/i.test(scope);
+  const hasPurpose = /storage|office|vehicle|equipment|meeting|restroom/i.test(scope);
+
+  let score = 0;
+  if (words < 15) score += 0.35;
+  if (words < 8)  score += 0.25;
+  if (!hasNumbers) score += 0.15;
+  if (!hasSF)      score += 0.15;
+  if (!hasSize)    score += 0.10;
+  if (!hasPurpose) score += 0.10;
+
+  return Math.min(score, 1.0);
+}
+
+// Ask Claude what questions to ask
+async function generateClarifyingQuestions(scope, projectType, state) {
+  const prompt = `You are helping a municipal official get a better construction cost estimate. They described their project as:
+
+PROJECT TYPE: ${projectType}
+STATE: ${state}
+DESCRIPTION: "${scope}"
+
+Generate exactly 2-3 clarifying questions that would most improve the accuracy of a construction cost estimate for this specific project. Focus on the highest-impact unknowns — things like size/square footage, number of functional units, specific amenities, or site constraints.
+
+Rules:
+- Ask only what is NOT already answered in the description above
+- Questions must be answerable by a non-technical town manager
+- Be specific to the project type
+- Short question labels, conversational placeholder text
+
+Respond ONLY with valid JSON array, no markdown:
+[
+  {
+    "id": "q1",
+    "label": "Short question label (5-8 words)",
+    "placeholder": "e.g. example answer to guide them..."
+  },
+  {
+    "id": "q2", 
+    "label": "Short question label (5-8 words)",
+    "placeholder": "e.g. example answer..."
+  }
+]`;
+
+  try {
+    const data = await callClaude(prompt);
+    // callClaude returns parsed JSON — but this is an array
+    return data;
+  } catch(e) {
+    return null;
+  }
+}
+
+// Override callClaude to handle array responses
+async function callClaudeRaw(prompt) {
+  const resp = await fetch('/api/claude', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      model: 'claude-sonnet-4-20250514',
+      max_tokens: 600,
+      messages: [{ role: 'user', content: prompt }]
+    })
+  });
+  const data = await resp.json();
+  const text = data.content.map(i => i.text || '').join('');
+  return JSON.parse(text.replace(/```json|```/g, '').trim());
+}
+
+// Show the clarifying modal
+function showClarifyModal(questions) {
+  _clarifyQuestions = questions;
+  const container = document.getElementById('clarifyQuestions');
+  container.innerHTML = '';
+  questions.forEach((q, i) => {
+    const div = document.createElement('div');
+    div.className = 'clarify-q';
+    div.innerHTML = `
+      <label>${q.label}</label>
+      <textarea id="clarify_${q.id}" placeholder="${q.placeholder}" rows="2"></textarea>
+    `;
+    container.appendChild(div);
+  });
+  document.getElementById('clarifyOverlay').style.display = 'flex';
+}
+
+// Submit clarifications — append answers to scope and run
+async function submitClarifications() {
+  if (!_pendingRunData) return;
+  const answers = _clarifyQuestions.map(q => {
+    const val = document.getElementById('clarify_' + q.id)?.value?.trim();
+    return val ? `${q.label}: ${val}` : null;
+  }).filter(Boolean);
+
+  document.getElementById('clarifyOverlay').style.display = 'none';
+
+  // Append clarifications to the original scope
+  if (answers.length > 0) {
+    const extra = '\n\nAdditional details: ' + answers.join('. ');
+    _pendingRunData.scope = _pendingRunData.scope + extra;
+  }
+
+  await executeRun(_pendingRunData);
+}
+
+// Skip clarifications — run as-is
+async function skipClarifications() {
+  document.getElementById('clarifyOverlay').style.display = 'none';
+  if (_pendingRunData) await executeRun(_pendingRunData);
 }
 
 document.addEventListener('DOMContentLoaded', () => {
