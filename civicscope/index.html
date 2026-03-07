@@ -908,4 +908,36 @@ async function submitLead() {
         scope: document.getElementById('scope').value.trim(),
         _subject: `CivicScope Lead — ${first} ${last}, ${role}, ${muni}`
       })
-  
+      });
+
+    // Log lead to Supabase
+    await logAction('log_lead', {
+      first, last, role, email, municipality: muni
+    });
+
+    document.getElementById('gateConfirmed').style.display = 'block';
+    document.getElementById('gateBtn').style.display = 'none';
+
+  } catch (err) {
+    gateBtn.disabled = false;
+    gateBtn.textContent = 'Email Me This Report';
+    alert('Something went wrong. Please try again.');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  // ZIP auto-fill state only
+  document.getElementById('zip').addEventListener('blur', async function() {
+    const zip = this.value.trim();
+    if (zip.length !== 5) return;
+    try {
+      const res = await fetch(`https://api.zippopotam.us/us/${zip}`);
+      if (!res.ok) return;
+      const data = await res.json();
+      document.getElementById('state').value = data.places[0]['state abbreviation'];
+    } catch(e) {}
+  });
+});
+</script>
+</body>
+</html>
