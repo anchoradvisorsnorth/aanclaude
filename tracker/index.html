@@ -206,7 +206,7 @@ header {
   margin: 0 auto;
   padding: 40px var(--page-pad) 80px;
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 24px;
 }
 
@@ -343,7 +343,7 @@ header {
 <div class="page-title-section">
   <div class="page-title-inner">
     <h1>Project Tracker</h1>
-    <p>Everything across AAN, CivicScope, CS&nbsp;GC, and MTP — what's done, in progress, and on the roadmap.</p>
+    <p>Active items across all projects — organized by project.</p>
   </div>
 </div>
 
@@ -363,119 +363,87 @@ header {
 <script>
 // ══════════════════════════════════════════════
 //  DATA — edit here, then redeploy
+//  Only items we are actively working on in Claude sessions
 // ══════════════════════════════════════════════
 
 const projects = [
-  { id: "aan",  name: "AAN",        color: "#1e40af" },
-  { id: "cs",   name: "CivicScope", color: "#7c3aed" },
-  { id: "csgc", name: "CS GC",      color: "#059669" },
-  { id: "mtp",  name: "MTP",        color: "#c2410c" },
-  { id: "jbk",  name: "JBK",        color: "#0d9488" },
-  { id: "ryc",  name: "RYC",        color: "#b45309" },
+  { id: "cs",   name: "CivicScope",  color: "#7c3aed", desc: "Web product — Free, Pro, GC, GC-Internal/Estimator" },
+  { id: "jbk",  name: "JBK",         color: "#0d9488", desc: "Keith's development company" },
+  { id: "ryc",  name: "RYC",         color: "#b45309", desc: "Sister company to JBK" },
+  { id: "mtp",  name: "MTP",         color: "#c2410c", desc: "Estate planning lead funnel — workbook sales" },
+  { id: "aan",  name: "AAN",         color: "#1e40af", desc: "Estate planning website" },
 ];
 
 const items = [
-  // ═══ AAN ══════════════════════════════════
-  { id: 1,  project: "aan",  title: "Initial site launch on Vercel",       status: "done",        note: "Live at aanclaude.vercel.app" },
-  { id: 2,  project: "aan",  title: "Project tracker page",                status: "in-progress", note: "Hidden route at /tracker" },
-  { id: 3,  project: "aan",  title: "Add authentication to tracker",       status: "roadmap",     note: "Optional — only if needed later" },
-
   // ═══ CivicScope ═══════════════════════════
-  { id: 10, project: "cs",   title: "CivicScope dashboard deployed",       status: "done",        note: "jbkcivicscope.vercel.app/civicscope" },
-  { id: 11, project: "cs",   title: "Resolve secrets alert in repo",       status: "in-progress", note: "GitHub flagged possible exposed secrets — rotate & revoke" },
-  { id: 12, project: "cs",   title: "User analytics integration",          status: "roadmap",     note: "" },
-
-  // ═══ CS GC ════════════════════════════════
-  { id: 20, project: "csgc", title: "CS GC dashboard",                     status: "in-progress", note: "" },
-  { id: 21, project: "csgc", title: "CS GC public launch",                 status: "roadmap",     note: "" },
-
-  // ═══ MTP ══════════════════════════════════
-  { id: 30, project: "mtp",  title: "MTP initial build",                   status: "in-progress", note: "" },
+  { project: "cs",  title: "Resolve secrets alert in repo",    status: "pending", note: "GitHub flagged possible exposed secrets — rotate & revoke" },
+  { project: "cs",  title: "CS GC dashboard",                  status: "pending", note: "" },
+  { project: "cs",  title: "CS Free dashboard",                status: "done",    note: "jbkcivicscope.vercel.app/civicscope" },
 
   // ═══ JBK ══════════════════════════════════
-  { id: 40, project: "jbk",  title: "Folder reorganization completed",     status: "done",        note: "Old AAA Mine structure cleaned up into project-centric layout" },
-  { id: 41, project: "jbk",  title: "BOT Education Playbook created",      status: "done",        note: "Leave-behind / board briefing for schools & municipalities" },
-  { id: 42, project: "jbk",  title: "Owner's First BOT Playbook created",  status: "done",        note: "Step-by-step from board resolution through signed BOT agreement" },
-  { id: 43, project: "jbk",  title: "Bristol BOT project — contract signed",status: "done",       note: "Flagship active BOT project, signed March 2026" },
-  { id: 44, project: "jbk",  title: "Peru pipeline development",           status: "in-progress", note: "High-value pipeline item — commercial/industrial opportunity" },
-  { id: 45, project: "jbk",  title: "Rochester pipeline development",      status: "in-progress", note: "High-value pipeline after Bristol" },
-  { id: 46, project: "jbk",  title: "Niles opportunity",                   status: "in-progress", note: "Commercial/industrial spec development" },
-  { id: 47, project: "jbk",  title: "Meaningful-connect BD system",        status: "in-progress", note: "Relationship-driven BD funnel — JBK's core competitive advantage" },
-  { id: 48, project: "jbk",  title: "Review To Review folder & archive",   status: "in-progress", note: "Confirm new structure is complete, then delete originals" },
-  { id: 49, project: "jbk",  title: "Create CLAUDE.md for JBK project",    status: "roadmap",     note: "So future sessions start with full context" },
-  { id: 50, project: "jbk",  title: "School BOT outreach program",         status: "roadmap",     note: "Long-term play — could become largest revenue stream in 3-5 yrs" },
-  { id: 51, project: "jbk",  title: "Industrial spec building prototypes", status: "roadmap",     note: "Repeatable 50k–125k SF prototypes in relationship communities" },
+  { project: "jbk", title: "School outreach",                  status: "pending", note: "" },
+  { project: "jbk", title: "BOT Playbook",                     status: "pending", note: "Education + Owner's First BOT playbooks" },
+  { project: "jbk", title: "Folder reorganization",            status: "done",    note: "Old AAA Mine structure cleaned up" },
 
   // ═══ RYC ══════════════════════════════════
-  { id: 60, project: "ryc",  title: "Scheduler spreadsheet",               status: "in-progress", note: "SCHEDULE 2026.xlsx — needs help / outstanding" },
-  { id: 61, project: "ryc",  title: "Align BD efforts to JBK's two lanes", status: "in-progress", note: "All BD supports BOT + commercial/industrial strategy" },
-  { id: 62, project: "ryc",  title: "Define RYC market focus",             status: "in-progress", note: "Schools, municipal buildings, utilities, industrial/commercial" },
-  { id: 63, project: "ryc",  title: "Position RYC as JBK execution engine",status: "roadmap",     note: "Preferred builder for BOT + municipal specialist niche" },
-  { id: 64, project: "ryc",  title: "Formalize market categories",         status: "roadmap",     note: "Schools, municipal, utilities/public safety, industrial/commercial" },
+  { project: "ryc", title: "Scheduler spreadsheet",            status: "pending", note: "SCHEDULE 2026.xlsx — outstanding" },
+
+  // ═══ MTP ══════════════════════════════════
+  { project: "mtp", title: "MTP site build",                   status: "done",    note: "michianatrustplanning.com" },
+
+  // ═══ AAN ══════════════════════════════════
+  { project: "aan", title: "Project tracker page",             status: "done",    note: "aanclaude.vercel.app/tracker" },
+  { project: "aan", title: "Remove old CivicScope pages from repo", status: "pending", note: "civicscope/ and civicscope-pro/ folders — no longer needed" },
 ];
 
 // ══════════════════════════════════════════════
-//  RENDER (no edits needed below)
+//  RENDER — one column per project
 // ══════════════════════════════════════════════
 
-const STATUS_COLS = [
-  { key: "roadmap",     label: "Roadmap",     icon: "&#x25CB;", cssClass: "col--roadmap" },
-  { key: "in-progress", label: "In Progress", icon: "&#x25D4;", cssClass: "col--progress" },
-  { key: "done",        label: "Done",        icon: "&#x25CF;", cssClass: "col--done" },
-];
-
-function getProject(id) { return projects.find(p => p.id === id); }
+const STATUSES = { "pending": "Pending", "in-progress": "In Progress", "done": "Done" };
+const STATUS_COLORS = { "pending": "#d97706", "in-progress": "#2563eb", "done": "#059669" };
 
 // Stats
-const done    = items.filter(i => i.status === "done").length;
-const inProg  = items.filter(i => i.status === "in-progress").length;
-const roadmap = items.filter(i => i.status === "roadmap").length;
 const total   = items.length;
-const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
+const done    = items.filter(i => i.status === "done").length;
+const pending = items.filter(i => i.status === "pending" || i.status === "in-progress").length;
 
 document.getElementById("stats").innerHTML = `
   <span class="stat"><strong>${total}</strong> items</span>
   <span class="stat"><strong class="done">${done}</strong> done</span>
-  <span class="stat"><strong class="progress">${inProg}</strong> in progress</span>
-  <span class="stat"><strong class="roadmap">${roadmap}</strong> roadmap</span>
+  <span class="stat"><strong class="progress">${pending}</strong> pending</span>
   <div class="progress-bar-wrap">
-    <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
-    <span class="progress-pct">${pct}%</span>
-  </div>
-  <div class="legend">
-    ${projects.map(p => `
-      <div class="legend-item">
-        <span class="legend-dot" style="background:${p.color}"></span>
-        <span class="legend-label">${p.name}</span>
-      </div>
-    `).join("")}
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:${Math.round((done/total)*100)}%"></div></div>
+    <span class="progress-pct">${Math.round((done/total)*100)}%</span>
   </div>
 `;
 
-// Board
-document.getElementById("board").innerHTML = STATUS_COLS.map(col => {
-  const colItems = items.filter(i => i.status === col.key);
-  const cards = colItems.length > 0
-    ? colItems.map(item => {
-        const p = getProject(item.project);
-        return `
-          <div class="card">
-            <div class="card-top">
-              <span class="card-title">${item.title}</span>
-              ${p ? `<span class="card-badge" style="background:${p.color}">${p.name}</span>` : ""}
-            </div>
-            ${item.note ? `<p class="card-note">${item.note}</p>` : ""}
-          </div>`;
-      }).join("")
-    : `<p class="col-empty">Nothing here yet</p>`;
+// Board — one column per project
+document.getElementById("board").innerHTML = projects.map(proj => {
+  const projItems = items.filter(i => i.project === proj.id);
+  if (projItems.length === 0) return "";
+
+  const cards = projItems.map(item => {
+    const statusColor = STATUS_COLORS[item.status] || "#78716c";
+    const statusLabel = STATUSES[item.status] || item.status;
+    return `
+      <div class="card">
+        <div class="card-top">
+          <span class="card-title">${item.title}</span>
+          <span class="card-badge" style="background:${statusColor}">${statusLabel}</span>
+        </div>
+        ${item.note ? `<p class="card-note">${item.note}</p>` : ""}
+      </div>`;
+  }).join("");
 
   return `
-    <div class="col ${col.cssClass}">
-      <div class="col-header">
-        <span class="icon">${col.icon}</span>
-        <h2>${col.label}</h2>
-        <span class="col-count">${colItems.length}</span>
+    <div class="col">
+      <div class="col-header" style="background: ${proj.color}10; border-bottom-color: ${proj.color}30;">
+        <span class="icon" style="width:10px;height:10px;border-radius:50%;background:${proj.color};display:inline-block;"></span>
+        <h2 style="color:${proj.color}">${proj.name}</h2>
+        <span class="col-count">${projItems.length}</span>
       </div>
+      ${proj.desc ? `<p style="padding:10px 20px 0;font-size:0.7rem;color:var(--muted-light);">${proj.desc}</p>` : ""}
       <div class="col-body">${cards}</div>
     </div>`;
 }).join("");
