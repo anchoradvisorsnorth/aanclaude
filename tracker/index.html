@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Project Tracker — Anchor Advisors North</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,600&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,300&display=swap" rel="stylesheet">
+
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN SYSTEM — matches CivicScope / AAN
+═══════════════════════════════════════════ */
+:root {
+  --font-display: 'Fraunces', serif;
+  --font-body: 'DM Sans', sans-serif;
+  --cream:        #faf8f4;
+  --cream-dark:   #f2ede4;
+  --white:        #ffffff;
+  --ink:          #1c1917;
+  --ink-light:    #44403c;
+  --muted:        #78716c;
+  --muted-light:  #a8a29e;
+  --rule:         #e7e2d8;
+  --accent:       #c2410c;
+  --accent-hover: #a83509;
+  --accent-light: #fff3ec;
+  --accent-dim:   rgba(194, 65, 12, 0.1);
+  --page-pad: 80px;
+  --section-pad: 68px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--ink);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Header ── */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(250, 248, 244, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+.header-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--page-pad);
+  height: 64px;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.wordmark {
+  font-family: var(--font-display);
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.03em;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.wordmark-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  display: inline-block;
+  margin-bottom: 2px;
+  flex-shrink: 0;
+}
+.header-divider {
+  width: 1px;
+  height: 20px;
+  background: var(--rule);
+}
+.header-tagline {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* ── Page Title Section ── */
+.page-title-section {
+  background: var(--ink);
+  padding: 56px var(--page-pad) 48px;
+  position: relative;
+  overflow: hidden;
+}
+.page-title-section::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 80% 20%, rgba(194,65,12,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 60% at 10% 80%, rgba(194,65,12,0.06) 0%, transparent 50%);
+  pointer-events: none;
+}
+.page-title-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+.page-title-inner h1 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.4rem);
+  font-weight: 600;
+  color: white;
+  letter-spacing: -0.03em;
+  margin-bottom: 8px;
+}
+.page-title-inner p {
+  font-size: 0.88rem;
+  color: var(--muted-light);
+  font-weight: 300;
+}
+
+/* ── Stats Bar ── */
+.stats-bar {
+  background: var(--white);
+  border-bottom: 1px solid var(--rule);
+  padding: 16px var(--page-pad);
+}
+.stats-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+.stat {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+.stat strong {
+  font-weight: 600;
+  color: var(--ink);
+}
+.stat strong.done { color: #059669; }
+.stat strong.progress { color: #d97706; }
+.stat strong.roadmap { color: var(--muted); }
+.progress-bar-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.progress-bar {
+  width: 100px;
+  height: 5px;
+  background: var(--cream-dark);
+  border-radius: 99px;
+  overflow: hidden;
+}
+.progress-bar-fill {
+  height: 100%;
+  background: #059669;
+  border-radius: 99px;
+  transition: width 0.4s ease;
+}
+.progress-pct {
+  font-size: 0.72rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* ── Legend ── */
+.legend {
+  display: flex;
+  gap: 20px;
+  margin-left: auto;
+  flex-wrap: wrap;
+}
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.legend-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+.legend-label {
+  font-size: 0.72rem;
+  color: var(--muted);
+  font-weight: 500;
+}
+
+/* ── Board ── */
+.board {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 40px var(--page-pad) 80px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* ── Column ── */
+.col {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  min-height: 320px;
+}
+.col-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--rule);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.col-header .icon { font-size: 1rem; }
+.col-header h2 {
+  font-family: var(--font-body);
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--ink-light);
+}
+.col-count {
+  margin-left: auto;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--muted-light);
+  background: var(--cream);
+  padding: 2px 8px;
+  border-radius: 99px;
+}
+.col-body {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.col-empty {
+  text-align: center;
+  font-size: 0.78rem;
+  color: var(--muted-light);
+  font-style: italic;
+  padding: 40px 0;
+}
+
+/* Column accents */
+.col--roadmap .col-header { background: var(--cream); }
+.col--progress .col-header { background: #fffbeb; }
+.col--done .col-header { background: #f0fdf4; }
+
+/* ── Card ── */
+.card {
+  background: var(--white);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 14px 16px;
+  transition: box-shadow 0.15s, border-color 0.15s;
+}
+.card:hover {
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  border-color: var(--muted-light);
+}
+.card-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+.card-title {
+  font-size: 0.84rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.card-badge {
+  font-size: 0.62rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 99px;
+  color: white;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.card-note {
+  font-size: 0.74rem;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+/* ── Footer ── */
+.page-footer {
+  text-align: center;
+  padding: 0 var(--page-pad) 48px;
+}
+.page-footer p {
+  font-size: 0.72rem;
+  color: var(--muted-light);
+}
+.page-footer code {
+  background: var(--cream-dark);
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 0.7rem;
+}
+
+/* ── Responsive ── */
+@media (max-width: 900px) {
+  :root { --page-pad: 24px; }
+  .board { grid-template-columns: 1fr; }
+  .stats-inner { gap: 16px; }
+  .legend { margin-left: 0; width: 100%; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Header -->
+<header>
+  <div class="header-inner">
+    <a href="../" class="wordmark">Anchor Advisors<span class="wordmark-dot"></span></a>
+    <div class="header-divider"></div>
+    <span class="header-tagline">Internal Project Tracker</span>
+  </div>
+</header>
+
+<!-- Title -->
+<div class="page-title-section">
+  <div class="page-title-inner">
+    <h1>Project Tracker</h1>
+    <p>Everything across AAN, CivicScope, CS&nbsp;GC, and MTP — what's done, in progress, and on the roadmap.</p>
+  </div>
+</div>
+
+<!-- Stats + Legend -->
+<div class="stats-bar">
+  <div class="stats-inner" id="stats"></div>
+</div>
+
+<!-- Board -->
+<div class="board" id="board"></div>
+
+<!-- Footer -->
+<div class="page-footer">
+  <p>To update, edit the <code>items</code> array in this file and redeploy.</p>
+</div>
+
+<script>
+// ══════════════════════════════════════════════
+//  DATA — edit here, then redeploy
+// ══════════════════════════════════════════════
+
+const projects = [
+  { id: "aan",  name: "AAN",        color: "#1e40af" },
+  { id: "cs",   name: "CivicScope", color: "#7c3aed" },
+  { id: "csgc", name: "CS GC",      color: "#059669" },
+  { id: "mtp",  name: "MTP",        color: "#c2410c" },
+  { id: "jbk",  name: "JBK",        color: "#0d9488" },
+  { id: "ryc",  name: "RYC",        color: "#b45309" },
+];
+
+const items = [
+  // ═══ AAN ══════════════════════════════════
+  { id: 1,  project: "aan",  title: "Initial site launch on Vercel",       status: "done",        note: "Live at aanclaude.vercel.app" },
+  { id: 2,  project: "aan",  title: "Project tracker page",                status: "in-progress", note: "Hidden route at /tracker" },
+  { id: 3,  project: "aan",  title: "Add authentication to tracker",       status: "roadmap",     note: "Optional — only if needed later" },
+
+  // ═══ CivicScope ═══════════════════════════
+  { id: 10, project: "cs",   title: "CivicScope dashboard deployed",       status: "done",        note: "jbkcivicscope.vercel.app/civicscope" },
+  { id: 11, project: "cs",   title: "Resolve secrets alert in repo",       status: "in-progress", note: "GitHub flagged possible exposed secrets — rotate & revoke" },
+  { id: 12, project: "cs",   title: "User analytics integration",          status: "roadmap",     note: "" },
+
+  // ═══ CS GC ════════════════════════════════
+  { id: 20, project: "csgc", title: "CS GC dashboard",                     status: "in-progress", note: "" },
+  { id: 21, project: "csgc", title: "CS GC public launch",                 status: "roadmap",     note: "" },
+
+  // ═══ MTP ══════════════════════════════════
+  { id: 30, project: "mtp",  title: "MTP initial build",                   status: "in-progress", note: "" },
+
+  // ═══ JBK ══════════════════════════════════
+  { id: 40, project: "jbk",  title: "Folder reorganization completed",     status: "done",        note: "Old AAA Mine structure cleaned up into project-centric layout" },
+  { id: 41, project: "jbk",  title: "BOT Education Playbook created",      status: "done",        note: "Leave-behind / board briefing for schools & municipalities" },
+  { id: 42, project: "jbk",  title: "Owner's First BOT Playbook created",  status: "done",        note: "Step-by-step from board resolution through signed BOT agreement" },
+  { id: 43, project: "jbk",  title: "Bristol BOT project — contract signed",status: "done",       note: "Flagship active BOT project, signed March 2026" },
+  { id: 44, project: "jbk",  title: "Peru pipeline development",           status: "in-progress", note: "High-value pipeline item — commercial/industrial opportunity" },
+  { id: 45, project: "jbk",  title: "Rochester pipeline development",      status: "in-progress", note: "High-value pipeline after Bristol" },
+  { id: 46, project: "jbk",  title: "Niles opportunity",                   status: "in-progress", note: "Commercial/industrial spec development" },
+  { id: 47, project: "jbk",  title: "Meaningful-connect BD system",        status: "in-progress", note: "Relationship-driven BD funnel — JBK's core competitive advantage" },
+  { id: 48, project: "jbk",  title: "Review To Review folder & archive",   status: "in-progress", note: "Confirm new structure is complete, then delete originals" },
+  { id: 49, project: "jbk",  title: "Create CLAUDE.md for JBK project",    status: "roadmap",     note: "So future sessions start with full context" },
+  { id: 50, project: "jbk",  title: "School BOT outreach program",         status: "roadmap",     note: "Long-term play — could become largest revenue stream in 3-5 yrs" },
+  { id: 51, project: "jbk",  title: "Industrial spec building prototypes", status: "roadmap",     note: "Repeatable 50k–125k SF prototypes in relationship communities" },
+
+  // ═══ RYC ══════════════════════════════════
+  { id: 60, project: "ryc",  title: "Scheduler spreadsheet",               status: "in-progress", note: "SCHEDULE 2026.xlsx — needs help / outstanding" },
+  { id: 61, project: "ryc",  title: "Align BD efforts to JBK's two lanes", status: "in-progress", note: "All BD supports BOT + commercial/industrial strategy" },
+  { id: 62, project: "ryc",  title: "Define RYC market focus",             status: "in-progress", note: "Schools, municipal buildings, utilities, industrial/commercial" },
+  { id: 63, project: "ryc",  title: "Position RYC as JBK execution engine",status: "roadmap",     note: "Preferred builder for BOT + municipal specialist niche" },
+  { id: 64, project: "ryc",  title: "Formalize market categories",         status: "roadmap",     note: "Schools, municipal, utilities/public safety, industrial/commercial" },
+];
+
+// ══════════════════════════════════════════════
+//  RENDER (no edits needed below)
+// ══════════════════════════════════════════════
+
+const STATUS_COLS = [
+  { key: "roadmap",     label: "Roadmap",     icon: "&#x25CB;", cssClass: "col--roadmap" },
+  { key: "in-progress", label: "In Progress", icon: "&#x25D4;", cssClass: "col--progress" },
+  { key: "done",        label: "Done",        icon: "&#x25CF;", cssClass: "col--done" },
+];
+
+function getProject(id) { return projects.find(p => p.id === id); }
+
+// Stats
+const done    = items.filter(i => i.status === "done").length;
+const inProg  = items.filter(i => i.status === "in-progress").length;
+const roadmap = items.filter(i => i.status === "roadmap").length;
+const total   = items.length;
+const pct     = total > 0 ? Math.round((done / total) * 100) : 0;
+
+document.getElementById("stats").innerHTML = `
+  <span class="stat"><strong>${total}</strong> items</span>
+  <span class="stat"><strong class="done">${done}</strong> done</span>
+  <span class="stat"><strong class="progress">${inProg}</strong> in progress</span>
+  <span class="stat"><strong class="roadmap">${roadmap}</strong> roadmap</span>
+  <div class="progress-bar-wrap">
+    <div class="progress-bar"><div class="progress-bar-fill" style="width:${pct}%"></div></div>
+    <span class="progress-pct">${pct}%</span>
+  </div>
+  <div class="legend">
+    ${projects.map(p => `
+      <div class="legend-item">
+        <span class="legend-dot" style="background:${p.color}"></span>
+        <span class="legend-label">${p.name}</span>
+      </div>
+    `).join("")}
+  </div>
+`;
+
+// Board
+document.getElementById("board").innerHTML = STATUS_COLS.map(col => {
+  const colItems = items.filter(i => i.status === col.key);
+  const cards = colItems.length > 0
+    ? colItems.map(item => {
+        const p = getProject(item.project);
+        return `
+          <div class="card">
+            <div class="card-top">
+              <span class="card-title">${item.title}</span>
+              ${p ? `<span class="card-badge" style="background:${p.color}">${p.name}</span>` : ""}
+            </div>
+            ${item.note ? `<p class="card-note">${item.note}</p>` : ""}
+          </div>`;
+      }).join("")
+    : `<p class="col-empty">Nothing here yet</p>`;
+
+  return `
+    <div class="col ${col.cssClass}">
+      <div class="col-header">
+        <span class="icon">${col.icon}</span>
+        <h2>${col.label}</h2>
+        <span class="col-count">${colItems.length}</span>
+      </div>
+      <div class="col-body">${cards}</div>
+    </div>`;
+}).join("");
+</script>
+</body>
+</html>
