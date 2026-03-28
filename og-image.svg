@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <!-- Background -->
+  <rect width="1200" height="630" fill="#f5f1ea"/>
+
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="12" height="630" fill="#b07d2e"/>
+
+  <!-- Anchor icon (simplified) -->
+  <g transform="translate(80, 180)">
+    <line x1="20" y1="0" x2="20" y2="50" stroke="#1c2b3a" stroke-width="3" stroke-linecap="round"/>
+    <line x1="8" y1="14" x2="32" y2="14" stroke="#1c2b3a" stroke-width="3" stroke-linecap="round"/>
+    <path d="M6 50 Q20 62 34 50" fill="none" stroke="#b07d2e" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="20" cy="0" r="6" fill="none" stroke="#1c2b3a" stroke-width="2.5"/>
+  </g>
+
+  <!-- Wordmark -->
+  <text x="140" y="218" font-family="Georgia, 'Times New Roman', serif" font-weight="600" font-size="52" fill="#1c2b3a" letter-spacing="-0.5">Anchor Advisors North</text>
+
+  <!-- Gold decorative rule -->
+  <line x1="80" y1="260" x2="520" y2="260" stroke="#b07d2e" stroke-width="1.5" opacity="0.6"/>
+
+  <!-- Tagline -->
+  <text x="80" y="320" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-weight="400" font-size="28" fill="#1c2b3a">Trust-Based Estate Planning</text>
+
+  <!-- Supporting line -->
+  <text x="80" y="370" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-weight="300" font-size="22" fill="#6b7787">Northern Indiana  ·  Advisor-Led  ·  Funded and Complete</text>
+
+  <!-- Keith credit -->
+  <text x="80" y="430" font-family="'Segoe UI', Arial, Helvetica, sans-serif" font-weight="400" font-size="18" fill="#6b7787">Keith Plummer, J.D.  ·  anchoradvisorsnorth.com</text>
+
+  <!-- Bottom gold accent bar -->
+  <rect x="0" y="618" width="1200" height="12" fill="#b07d2e"/>
+</svg>
