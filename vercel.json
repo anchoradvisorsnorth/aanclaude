@@ -1,5 +1,7 @@
 {
   "redirects": [
-    { "source": "/index.html", "destination": "/", "statusCode": 301 }
+    { "source": "/index.html", "destination": "/", "statusCode": 301 },
+    { "source": "/tracker", "destination": "https://crm.jbkdevelopment.com/tracker", "statusCode": 301 },
+    { "source": "/tracker/(.*)", "destination": "https://crm.jbkdevelopment.com/tracker", "statusCode": 301 }
   ]
 }
