@@ -446,6 +446,52 @@ tbody tr:hover td { background: var(--cream); }
   font-style: italic;
 }
 
+/* ── Security column ── */
+.security-cell {
+  min-width: 220px;
+  max-width: 280px;
+}
+.security-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.76rem;
+  font-weight: 500;
+  color: var(--ink);
+  line-height: 1.35;
+}
+.security-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: inline-block;
+}
+.security-dot.ok     { background: #22c55e; }
+.security-dot.watch  { background: #f59e0b; }
+.security-dot.alert  { background: #ef4444; }
+.security-dot.leaked { background: #ef4444; box-shadow: 0 0 0 3px rgba(239,68,68,0.15); }
+.security-note {
+  font-size: 0.72rem;
+  color: var(--muted);
+  margin-top: 3px;
+  line-height: 1.4;
+}
+.security-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 12px;
+  margin-top: 6px;
+  font-size: 0.7rem;
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+.security-meta strong {
+  color: var(--ink-light);
+  font-weight: 500;
+}
+.security-meta .stale { color: #c2410c; font-weight: 600; }
+.security-meta .cap-off { color: #c2410c; font-weight: 600; }
+
 /* ── Category colors ── */
 .cat-Hosting       { background: #ede9fe; color: #5b21b6; }
 .cat-Database      { background: #dcfce7; color: #166534; }
@@ -571,6 +617,7 @@ tbody tr:hover td { background: var(--cream); }
           <th data-sort="owner">Owner Account <span class="sort-ind"></span></th>
           <th data-sort="billing">Billing <span class="sort-ind"></span></th>
           <th data-sort="monthlyCost">Monthly <span class="sort-ind"></span></th>
+          <th data-sort="security">Security <span class="sort-ind"></span></th>
           <th data-sort="renewal">Renewal <span class="sort-ind"></span></th>
           <th>Notes</th>
         </tr>
@@ -606,6 +653,12 @@ const businessMeta = {
 //              Payments, Ads, CRM, Construction, Forms,
 //              Integration, Infrastructure, SEO, Design,
 //              Social, DevTools, Accounting
+//
+//  Security fields:
+//    keyRotatedAt   — ISO date of last key rotation, or null if never rotated, or "N/A" if no key
+//    exposureStatus — "none" | "flagged" | "leaked"
+//    spendLimitSet  — true | false | "N/A"
+//    opsStatus      — { tone: "ok" | "watch" | "alert", note: "short string" }
 // ══════════════════════════════════════════════
 const platforms = [
   {
@@ -618,7 +671,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Hobby tier cron noted as unreliable — evaluate Pro upgrade for CS digest."
+    notes: "Hobby tier cron noted as unreliable — evaluate Pro upgrade for CS digest.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "No usage alert threshold configured" }
   },
   {
     name: "GitHub",
@@ -630,7 +687,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Keith deploys manually — no CI push automation."
+    notes: "Keith deploys manually — no CI push automation.",
+    keyRotatedAt: null,
+    exposureStatus: "flagged",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "alert", note: "3 PATs hardcoded in local PUSH_*.bat scripts — rotate + move to $env:GITHUB_TOKEN" }
   },
   {
     name: "Microsoft Azure",
@@ -642,7 +703,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Single B-series VM. 20.230.82.67. SSH on 443 + 22."
+    notes: "Single B-series VM. 20.230.82.67. SSH on 443 + 22.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "No Cost Management budget alert configured" }
   },
   {
     name: "Cloudflare",
@@ -654,7 +719,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Free tier currently sufficient."
+    notes: "Free tier currently sufficient.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Supabase",
@@ -666,7 +735,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "MTP & AAN intentionally do NOT use Supabase."
+    notes: "MTP & AAN intentionally do NOT use Supabase.",
+    keyRotatedAt: "2026-04-22",
+    exposureStatus: "leaked",
+    spendLimitSet: false,
+    opsStatus: { tone: "alert", note: "CS legacy service_role JWT on public GitHub since Mar 8 — new sb_secret_* live, legacy HS256 revoke pending" }
   },
   {
     name: "Resend (CivicScope)",
@@ -678,7 +751,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Free tier: 100/day, 3,000/mo — evaluate Pro if breached."
+    notes: "Free tier: 100/day, 3,000/mo — evaluate Pro if breached.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "ok", note: "Free-tier caps are the binding limit" }
   },
   {
     name: "Resend (MTP)",
@@ -690,7 +767,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Isolated from CS key. Never share RESEND_API_KEY across businesses."
+    notes: "Isolated from CS key. Never share RESEND_API_KEY across businesses.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Resend (AAN)",
@@ -702,7 +783,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Pending setup."
+    notes: "Pending setup.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "watch", note: "Not yet set up — inquire.html form still unwired" }
   },
   {
     name: "Google Workspace (JBK)",
@@ -714,7 +799,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Migrated from O365 March 2026."
+    notes: "Migrated from O365 March 2026.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Google Workspace (AAN/MTP)",
@@ -726,7 +815,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: ""
+    notes: "",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Microsoft 365",
@@ -738,7 +831,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Retained solely for RYC. schedule@ dedicated mailbox for notifications."
+    notes: "Retained solely for RYC. schedule@ dedicated mailbox for notifications.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "Paid by RYC; no Keith-side cost control" }
   },
   {
     name: "SharePoint (M365 bundle)",
@@ -750,7 +847,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: 0,
     renewal: "",
-    notes: "Bundled with M365 license — no separate charge."
+    notes: "Bundled with M365 license — no separate charge.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "MailerLite",
@@ -762,7 +863,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Do not use for delivery — Resend handles sends."
+    notes: "Do not use for delivery — Resend handles sends.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Stripe",
@@ -774,7 +879,11 @@ const platforms = [
     billing: "Usage-based",
     monthlyCost: 0,
     renewal: "",
-    notes: "Per-transaction fees only. No monthly base."
+    notes: "Per-transaction fees only. No monthly base.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "Revenue side — no spend cap concept" }
   },
   {
     name: "Anthropic API (Claude)",
@@ -786,7 +895,11 @@ const platforms = [
     billing: "Usage-based",
     monthlyCost: null,
     renewal: "",
-    notes: "Temp 0.3, max_tokens 1200 for CS. Monitor usage."
+    notes: "Temp 0.3, max_tokens 1200 for CS. Monitor usage.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "No monthly spend limit set in Console" }
   },
   {
     name: "Procore",
@@ -798,7 +911,11 @@ const platforms = [
     billing: "Annual",
     monthlyCost: null,
     renewal: "",
-    notes: "DMSA installed Company ID 598134325557276. Secret rotated April 10."
+    notes: "DMSA installed Company ID 598134325557276. Secret rotated April 10.",
+    keyRotatedAt: "2026-04-10",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "Remediated after Apr 10 GitHub secret scan leak" }
   },
   {
     name: "Foundations",
@@ -810,7 +927,11 @@ const platforms = [
     billing: "Annual",
     monthlyCost: null,
     renewal: "",
-    notes: "Not yet integrated — exploring API/CSV export path."
+    notes: "Not yet integrated — exploring API/CSV export path.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "watch", note: "Not integrated with dashboard" }
   },
   {
     name: "Buildr",
@@ -822,7 +943,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Buildr API OAuth2 not yet working — needs vendor support."
+    notes: "Buildr API OAuth2 not yet working — needs vendor support.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "API auth broken — CSV fallback only" }
   },
   {
     name: "Tally",
@@ -834,7 +959,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Not yet set up."
+    notes: "Not yet set up.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "watch", note: "Not yet set up" }
   },
   {
     name: "Docupilot",
@@ -846,7 +975,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: 29,
     renewal: "",
-    notes: "~$29/mo per prior estimate. Not yet live."
+    notes: "~$29/mo per prior estimate. Not yet live.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "Not yet live" }
   },
   {
     name: "Zapier",
@@ -858,7 +991,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Not yet set up. Task-based pricing — choose tier to match volume."
+    notes: "Not yet set up. Task-based pricing — choose tier to match volume.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "Not yet set up" }
   },
   {
     name: "Meta Business Manager (Ads)",
@@ -870,7 +1007,11 @@ const platforms = [
     billing: "Usage-based",
     monthlyCost: null,
     renewal: "",
-    notes: "Meta Pixel 938566565699498 shared MTP+AAN. CS needs own pixel."
+    notes: "Meta Pixel 938566565699498 shared MTP+AAN. CS needs own pixel.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "No account-level spend cap — only per-campaign budgets" }
   },
   {
     name: "Google Search Console",
@@ -882,7 +1023,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "www-canonical URLs standardized March 29."
+    notes: "www-canonical URLs standardized March 29.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Canva",
@@ -894,7 +1039,11 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Pro vs Free — confirm plan."
+    notes: "Pro vs Free — confirm plan.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "watch", note: "Plan tier unconfirmed" }
   },
   {
     name: "Twitter/X Developer",
@@ -906,7 +1055,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "Free tier sufficient for daily pipeline."
+    notes: "Free tier sufficient for daily pipeline.",
+    keyRotatedAt: null,
+    exposureStatus: "none",
+    spendLimitSet: true,
+    opsStatus: { tone: "alert", note: "CreditsDepleted since Apr 20 — bookmarks digest pipeline failing" }
   },
   {
     name: "LinkedIn",
@@ -918,7 +1071,11 @@ const platforms = [
     billing: "Free",
     monthlyCost: 0,
     renewal: "",
-    notes: "No automation. Target 2–3 posts/week."
+    notes: "No automation. Target 2–3 posts/week.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: "N/A",
+    opsStatus: { tone: "ok", note: "" }
   },
   {
     name: "Pipeboard (Meta Ads MCP)",
@@ -930,14 +1087,18 @@ const platforms = [
     billing: "Monthly",
     monthlyCost: null,
     renewal: "",
-    notes: "Account setup in progress."
+    notes: "Account setup in progress.",
+    keyRotatedAt: "N/A",
+    exposureStatus: "none",
+    spendLimitSet: false,
+    opsStatus: { tone: "watch", note: "Account setup in progress" }
   }
 ];
 
 // ══════════════════════════════════════════════
 //  RENDER
 // ══════════════════════════════════════════════
-const state = { sortBy: "monthlyCost", sortDir: "desc" };
+const state = { sortBy: "security", sortDir: "asc" };
 
 const $ = (s) => document.querySelector(s);
 const fmt = (n) => n == null ? "TBD" : (n === 0 ? "Free" : "$" + n.toLocaleString(undefined, { minimumFractionDigits: 0, maximumFractionDigits: 2 }));
@@ -970,7 +1131,7 @@ function filteredPlatforms() {
     if (biz && !p.businesses.includes(biz)) return false;
     if (billing && p.billing !== billing) return false;
     if (search) {
-      const hay = [p.name, p.use, p.owner, p.notes, p.category, ...p.businesses].join(" ").toLowerCase();
+      const hay = [p.name, p.use, p.owner, p.notes, p.category, p.opsStatus?.note, ...p.businesses].join(" ").toLowerCase();
       if (!hay.includes(search)) return false;
     }
     return true;
@@ -980,6 +1141,9 @@ function filteredPlatforms() {
   const { sortBy, sortDir } = state;
   const dir = sortDir === "asc" ? 1 : -1;
   rows.sort((a, b) => {
+    if (sortBy === "security") {
+      return (securityPriority(a) - securityPriority(b)) * dir;
+    }
     let av = a[sortBy], bv = b[sortBy];
     if (sortBy === "businesses") { av = a.businesses[0] || ""; bv = b.businesses[0] || ""; }
     if (sortBy === "monthlyCost") {
@@ -1004,12 +1168,23 @@ function renderStats() {
   const tbdCount = platforms.filter(p => p.monthlyCost == null).length;
   const freeCount = platforms.filter(p => p.monthlyCost === 0).length;
   const bizCount = new Set(platforms.flatMap(p => p.businesses)).size;
+  const alertCount = platforms.filter(p => {
+    const t = statusTone(p);
+    return t === "leaked" || t === "alert";
+  }).length;
+  const watchCount = platforms.filter(p => statusTone(p) === "watch").length;
+  const alertColor = alertCount > 0 ? "#ef4444" : "var(--ink)";
 
   $("#stats").innerHTML = `
     <div class="stat-card">
       <span class="stat-label">Platforms</span>
       <span class="stat-value">${total}</span>
       <span class="stat-sub">across ${bizCount} businesses</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Needs Attention</span>
+      <span class="stat-value" style="color:${alertColor}">${alertCount}</span>
+      <span class="stat-sub">${watchCount} watch · see Security column</span>
     </div>
     <div class="stat-card">
       <span class="stat-label">Known Monthly</span>
@@ -1044,7 +1219,7 @@ function renderTable() {
   });
 
   if (rows.length === 0) {
-    body.innerHTML = `<tr class="empty-row"><td colspan="9">No platforms match these filters.</td></tr>`;
+    body.innerHTML = `<tr class="empty-row"><td colspan="10">No platforms match these filters.</td></tr>`;
     return;
   }
 
@@ -1068,11 +1243,77 @@ function renderTable() {
         <td class="email-cell">${p.owner || "—"}</td>
         <td class="billing">${p.billing || "—"}</td>
         <td class="${costCls}">${fmt(p.monthlyCost)}</td>
+        <td class="security-cell">${renderSecurity(p)}</td>
         <td class="renewal">${renewal}</td>
         <td class="notes-cell">${p.notes || ""}</td>
       </tr>
     `;
   }).join("");
+}
+
+// ══════════════════════════════════════════════
+//  SECURITY CELL + STATUS HELPERS
+// ══════════════════════════════════════════════
+// Resolves to the most severe signal for a platform, used for the status dot
+// and for sorting: alerts first, then watch, then ok.
+function statusTone(p) {
+  if (p.exposureStatus === "leaked") return "leaked";
+  const t = p.opsStatus?.tone || "ok";
+  if (t === "alert") return "alert";
+  if (p.exposureStatus === "flagged") return "alert";
+  if (t === "watch") return "watch";
+  return "ok";
+}
+
+// Sort priority — lower is more urgent.
+function securityPriority(p) {
+  const t = statusTone(p);
+  if (t === "leaked") return 0;
+  if (t === "alert")  return 1;
+  if (t === "watch")  return 2;
+  return 3;
+}
+
+function daysSince(iso) {
+  if (!iso || iso === "N/A") return null;
+  const then = Date.parse(iso);
+  if (Number.isNaN(then)) return null;
+  return Math.floor((Date.now() - then) / 86_400_000);
+}
+
+function renderSecurity(p) {
+  const tone = statusTone(p);
+  const labels = { leaked: "Leaked", alert: "Alert", watch: "Watch", ok: "OK" };
+  const statusLabel = labels[tone];
+  const note = p.opsStatus?.note || (p.exposureStatus === "leaked" ? "Key exposed in public source" : "");
+
+  // Rotation display
+  let rotation;
+  if (p.keyRotatedAt === "N/A") {
+    rotation = `<span><strong>Key:</strong> n/a</span>`;
+  } else if (!p.keyRotatedAt) {
+    rotation = `<span class="stale"><strong>Rotated:</strong> never</span>`;
+  } else {
+    const d = daysSince(p.keyRotatedAt);
+    const stale = d != null && d > 90 ? " stale" : "";
+    rotation = `<span class="${stale.trim()}"><strong>Rotated:</strong> ${p.keyRotatedAt}${d != null ? ` (${d}d)` : ""}</span>`;
+  }
+
+  // Spend-limit display
+  let cap;
+  if (p.spendLimitSet === "N/A") {
+    cap = `<span><strong>Cap:</strong> n/a</span>`;
+  } else if (p.spendLimitSet === true) {
+    cap = `<span><strong>Cap:</strong> set</span>`;
+  } else {
+    cap = `<span class="cap-off"><strong>Cap:</strong> not set</span>`;
+  }
+
+  return `
+    <div class="security-status"><span class="security-dot ${tone}"></span>${statusLabel}</div>
+    ${note ? `<div class="security-note">${note}</div>` : ""}
+    <div class="security-meta">${rotation}${cap}</div>
+  `;
 }
 
 function render() {
